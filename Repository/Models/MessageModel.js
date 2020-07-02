@@ -1,24 +1,22 @@
 const mongoose = require("mongoose");
 
-const testSchema = mongoose.Schema({
-  name: {
+const messageSchema = mongoose.Schema({
+  receipient: {
     type: String,
     required: true,
   },
-  email: {
+  message: {
     type: String,
     required: true,
   },
-  gender: String,
-  phone: String,
   create_date: {
     type: Date,
     default: Date.now,
   },
 });
 
-var Test = (module.exports = mongoose.model("test", testSchema));
+var Message = (module.exports = mongoose.model("message", messageSchema));
 
 module.exports.get = function (callback, limit) {
-  Test.find(callback).limit(limit);
+  Message.find(callback).limit(limit);
 };
