@@ -1,7 +1,12 @@
+const TestModel = require("./Models/TestModel");
+
 module.exports = {
   GetStatisticsAsync: async () => {
-    return new Promise((resolve) =>
-      setTimeout(resolve("OKdjsahkjdhas"), 10000)
-    );
+    const doc = await TestModel.create({
+      name: "Max Mustertest",
+      email: "m.mustertest@gmail.com",
+    });
+
+    return doc.toObject();
   },
 };
