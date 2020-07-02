@@ -22,5 +22,15 @@
     "helmet": "^3.23.3",
     "mongoose": "^5.9.21",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx prettier --write ."
+    }
   }
 }

@@ -6,5 +6,5 @@ const GetUserSatisfactionAsync = async () => {
 };
 
 module.exports = {
-  GetUserSatisfactionAsync: GetUserSatisfactionAsync,
+  GetUserSatisfactionAsync: GetUserSatisfactionAsync
 };

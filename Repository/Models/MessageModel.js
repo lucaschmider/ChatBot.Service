@@ -3,16 +3,16 @@ const mongoose = require("mongoose");
 const messageSchema = mongoose.Schema({
   receipient: {
     type: String,
-    required: true,
+    required: true
   },
   message: {
     type: String,
-    required: true,
+    required: true
   },
   create_date: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 var Message = (module.exports = mongoose.model("message", messageSchema));

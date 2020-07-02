@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost/chatbot", {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 });
 var db = mongoose.connection;
 

@@ -3,18 +3,18 @@ const mongoose = require("mongoose");
 const testSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
-    required: true,
+    required: true
   },
   gender: String,
   phone: String,
   create_date: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 var Test = (module.exports = mongoose.model("test", testSchema));

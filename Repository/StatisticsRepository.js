@@ -4,9 +4,9 @@ module.exports = {
   GetStatisticsAsync: async () => {
     const doc = await TestModel.create({
       name: "Max Mustertest",
-      email: "m.mustertest@gmail.com",
+      email: "m.mustertest@gmail.com"
     });
 
     return doc.toObject();
-  },
+  }
 };
