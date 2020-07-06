@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Application ConfigurationFiles
+env_*.json
+!env_example.json

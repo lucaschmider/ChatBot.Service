@@ -8,4 +8,6 @@ router.get("/", async (req, res) => {
   res.send(data);
 });
 
-module.exports = router;
+module.exports = {
+  StatisticsController: router
+};
