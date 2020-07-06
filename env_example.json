@@ -1,5 +1,5 @@
 {
-    "applicationPort": 0,
-    "databaseUrl": "",
-    "environment": ""
+  "applicationPort": 0,
+  "databaseUrl": "",
+  "environment": ""
 }

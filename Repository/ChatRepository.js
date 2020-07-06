@@ -19,5 +19,5 @@ module.exports = {
       create_date: { $lte: older_than },
       receipient: userId
     });
-  },
+  }
 };
