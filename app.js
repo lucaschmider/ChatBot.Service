@@ -2,15 +2,16 @@ const chalk = require("chalk");
 const express = require("express");
 const mongoose = require("mongoose");
 const controllers = require("./Controllers");
-const loadConfiguration = require("./ConfigService");
+const admin = require("firebase-admin");
+const { ConfigService } = require("./ConfigService");
 const app = express();
 
-async function startup() {
-  console.log(chalk.yellow(`Starting application for environment ${process.chatBot.environment}`));
-  console.log(chalk.yellow("Connecting to MongoDB"));
+async function startup(configuration) {
+  console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
 
   try {
-    await mongoose.connect(process.chatBot.databaseUrl, {
+    console.log(chalk.yellow("Connecting to MongoDB"));
+    await mongoose.connect(configuration.databaseUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -20,17 +21,28 @@ async function startup() {
     return;
   }
 
+  try {
+    console.log(chalk.yellow("Initializing Firebase"));
+    admin.initializeApp({
+      credential: admin.credential.cert(ConfigService.loadedConfiguration.firebase)
+    });
+    console.log(chalk.green("Successfully initialized Firebase"));
+  } catch (error) {
+    console.error(chalk.red("Error occured while initializing Firebase:\n", error));
+    return;
+  }
+
   app.use("/", controllers);
 
-  app.listen(process.chatBot.applicationPort, () =>
-    console.log(`Listening for requests at *:${process.chatBot.applicationPort}`)
+  app.listen(configuration.applicationPort, () =>
+    console.log(`Listening for requests at *:${configuration.applicationPort}`)
   );
 }
 
-loadConfiguration(process.argv[2])
-  .then((configuration) => {
-    process.chatBot = configuration;
-    startup();
+ConfigService.Create(process.argv[2])
+  .then((message) => {
+    console.log(chalk.green(message));
+    startup(ConfigService.loadedConfiguration);
   })
   .catch((error) => {
     console.log(chalk.red(error));
