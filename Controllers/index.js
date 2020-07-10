@@ -2,11 +2,20 @@ const { Router } = require("express");
 const { StatisticsController } = require("./StatisticsController");
 const { ChatController } = require("./ChatController");
 const { UserController } = require("./UserController");
-const authMiddleware = require("../Middleware/AuthMiddleware");
-const router = Router();
+const { AuthMiddleware } = require("../Middleware/AuthMiddleware");
 
-router.use("/Statistics", authMiddleware, StatisticsController);
-router.use("/Chat", authMiddleware, ChatController);
-router.use("/user", authMiddleware, UserController);
+class Controllers {
+  /**
+   * Returns a router instance representing all controllers
+   * @returns {Router}
+   */
+  static getRouter() {
+    const router = Router();
+    router.use("/statistics", AuthMiddleware.verifyIdToken, StatisticsController.getRouter());
+    router.use("/chat", AuthMiddleware.verifyIdToken, ChatController.getRouter());
+    router.use("/user", AuthMiddleware.verifyIdToken, UserController.getRouter());
+    return router;
+  }
+}
 
-module.exports = router;
+module.exports = { Controllers };
