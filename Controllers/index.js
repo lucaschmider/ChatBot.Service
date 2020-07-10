@@ -3,10 +3,20 @@ const { StatisticsController } = require("./StatisticsController");
 const { ChatController } = require("./ChatController");
 const { UserController } = require("./UserController");
 const authMiddleware = require("../Middleware/AuthMiddleware");
-const router = Router();
 
-router.use("/Statistics", authMiddleware, StatisticsController);
-router.use("/Chat", authMiddleware, ChatController);
-router.use("/user", authMiddleware, UserController);
+class Controllers {
+  /**
+   * Returns a router instance representing all controllers
+   * @returns {Router}
+   */
+  static getRouter() {
+    const router = Router();
 
-module.exports = router;
+    router.use("/statistics", authMiddleware, StatisticsController.getRouter());
+    router.use("/chat", authMiddleware, ChatController.getRouter());
+    router.use("/user", authMiddleware, UserController.getRouter());
+    return router;
+  }
+}
+
+module.exports = { Controllers };

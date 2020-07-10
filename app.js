@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const express = require("express");
 const mongoose = require("mongoose");
-const controllers = require("./Controllers");
+const { Controllers } = require("./Controllers");
 const admin = require("firebase-admin");
 const { ConfigService } = require("./ConfigService");
 const app = express();
@@ -34,12 +34,18 @@ async function startup(configuration) {
     return;
   }
 
-  app.use(cors());
-  app.use("/", controllers);
+  try {
+    console.log(chalk.yellow("Configuring routers and middleware"));
+    app.use(cors());
+    app.use("/", Controllers.getRouter());
 
-  app.listen(configuration.applicationPort, () =>
-    console.log(`Listening for requests at *:${configuration.applicationPort}`)
-  );
+    app.listen(configuration.applicationPort, () => {
+      console.log(chalk.bgGreen.black("Starup completed."));
+      console.log(`Listening for requests at *:${configuration.applicationPort}`);
+    });
+  } catch (error) {
+    console.error(chalk.red("Error occured while configuring routers and middleware:\n"), error);
+  }
 }
 
 ConfigService.Create(process.argv[2])
