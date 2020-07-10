@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const userRepository = require("../Repository/UserRepository");
 
 const getAuthToken = (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
@@ -14,7 +15,8 @@ const verifyIdToken = (req, res, next) => {
     try {
       const { authToken } = req;
       const userInfo = await admin.auth().verifyIdToken(authToken);
-      req.userId = userInfo.uid;
+      const userData = await userRepository.GetUserDataForUserAsync(userInfo.uid);
+      req.userData = userData;
       return next();
     } catch (e) {
       console.log(e);

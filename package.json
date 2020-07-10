@@ -27,6 +27,7 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "@types/mongoose": "^5.7.30",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5"
