@@ -5,6 +5,7 @@ const controllers = require("./Controllers");
 const admin = require("firebase-admin");
 const { ConfigService } = require("./ConfigService");
 const app = express();
+const cors = require("cors");
 
 async function startup(configuration) {
   console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
@@ -13,7 +14,8 @@ async function startup(configuration) {
     console.log(chalk.yellow("Connecting to MongoDB"));
     await mongoose.connect(configuration.databaseUrl, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useCreateIndex: true
     });
     console.log(chalk.green("Successfully connected to MongoDB."));
   } catch (error) {
@@ -32,6 +34,7 @@ async function startup(configuration) {
     return;
   }
 
+  app.use(cors());
   app.use("/", controllers);
 
   app.listen(configuration.applicationPort, () =>
