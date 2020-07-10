@@ -1,8 +1,8 @@
-const statisticsRepository = require("../Repository/StatisticsRepository.js");
+const { StatisticsRepository } = require("../Repository/StatisticsRepository.js");
 
 class StatisticsBusiness {
   GetUserSatisfactionAsync = async () => {
-    const data = await statisticsRepository.GetStatisticsAsync();
+    const data = await StatisticsRepository.GetStatisticsAsync();
     return data;
   };
 }

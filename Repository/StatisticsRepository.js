@@ -1,12 +1,12 @@
-const TestModel = require("./Models/TestModel");
-
-module.exports = {
-  GetStatisticsAsync: async () => {
-    const doc = await TestModel.create({
-      name: "Max Mustertest",
-      email: "m.mustertest@gmail.com"
-    });
-
-    return doc.toObject();
+class StatisticsRepository {
+  /**
+   * Returns dummy data
+   * @returns {Object} DummyData
+   */
+  static async GetStatisticsAsync() {
+    return {
+      Dummy: "Data"
+    };
   }
-};
+}
+module.exports = { StatisticsRepository };

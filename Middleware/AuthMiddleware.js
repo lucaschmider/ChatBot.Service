@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const userRepository = require("../Repository/UserRepository");
+const { UserRepository } = require("../Repository/UserRepository");
 const chalk = require("chalk");
 
 class AuthMiddleware {
@@ -30,7 +30,7 @@ class AuthMiddleware {
       try {
         const { authToken } = req;
         const userInfo = await admin.auth().verifyIdToken(authToken);
-        const userData = await userRepository.GetUserDataForUserAsync(userInfo.uid);
+        const userData = await UserRepository.GetUserDataForUserAsync(userInfo.uid);
 
         if (!userData) {
           console.warn(chalk.yellow("No UserData found for authenticated user:\n", JSON.stringify(userInfo)));
