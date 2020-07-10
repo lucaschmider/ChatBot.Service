@@ -1,5 +1,6 @@
 {
   "applicationPort": 0,
   "databaseUrl": "",
-  "environment": ""
+  "environment": "",
+  "firebase": {}
 }
