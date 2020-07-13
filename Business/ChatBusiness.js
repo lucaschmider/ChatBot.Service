@@ -1,5 +1,6 @@
 const { ChatRepository } = require("../Repository/ChatRepository");
 const { DialogFlowService } = require("../Services/DialogFlowService");
+const { ConfigService } = require("../Services/ConfigService");
 
 class ChatBusiness {
   static async ReadMessagesOfUserAsync(userId) {
@@ -16,23 +17,24 @@ class ChatBusiness {
   }
 
   static async HandleMessageAsync(userId, messageText) {
-    console.log({ userId, messageText });
     const answer = await DialogFlowService.HandleMessage(userId, messageText);
-    console.log(answer);
+
+    if (answer.isCompleted && answer.detectedIntent === ConfigService.loadedConfiguration.dialoflowIntent) {
+      await this.AnswerQuestionAsync(userId, answer.parameters);
+      return;
+    }
 
     if (answer && answer.answerText.length > 0) {
       await ChatRepository.CreateMessageAsync(userId, answer.answerText);
+      return;
     }
+  }
 
-    if (
-      answer.isCompleted &&
-      answer.detectedIntent === "projects/hidden-howl-282919/agent/intents/a64a74e9-afa5-4dd0-b533-9a90e3a3c3ad"
-    ) {
-      await ChatRepository.CreateMessageAsync(
-        userId,
-        `Ok, ein ${answer.parameters.keyword} nach ${answer.parameters.definitiontype} ist [...].`
-      );
-    }
+  static async AnswerQuestionAsync(userId, parameters) {
+    await ChatRepository.CreateMessageAsync(
+      userId,
+      `Ok, ein ${parameters.keyword} nach ${parameters.definitiontype} ist [...].`
+    );
   }
 }
 
