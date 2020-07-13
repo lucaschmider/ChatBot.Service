@@ -21,20 +21,8 @@ class ChatRepository {
    * @param {string} userId The userId to filter for
    */
   static async GetMessagesForUserAsync(userId) {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve([
-          {
-            message: "Das ist eine Nachricht vom Server",
-            timestamp: Date.now()
-          },
-          {
-            message: "Das ist eine andere Nachricht vom Server",
-            timestamp: Date.now()
-          }
-        ]);
-      }, 500)
-    );
+    const docs = await MessageModel.find({ receipient: userId });
+    return docs.map((doc) => doc.toObject());
   }
 
   /**

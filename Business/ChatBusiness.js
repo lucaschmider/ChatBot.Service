@@ -2,7 +2,14 @@ const { ChatRepository } = require("../Repository/ChatRepository");
 
 class ChatBusiness {
   static async ReadMessagesOfUserAsync(userId) {
-    return await ChatRepository.GetMessagesForUserAsync(userId);
+    const newMessages = (await ChatRepository.GetMessagesForUserAsync(userId)).sort(
+      (a, b) => a.create_date - b.create_date
+    );
+
+    if (newMessages.length === 0) return newMessages;
+    const oldestTimestamp = newMessages[0].create_date.getTime();
+    await ChatRepository.DeleteMessagesForUserOlderThan(userId, oldestTimestamp);
+    return newMessages;
   }
 }
 
