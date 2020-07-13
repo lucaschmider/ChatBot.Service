@@ -11,6 +11,10 @@ class ChatBusiness {
     await ChatRepository.DeleteMessagesForUserOlderThan(userId, oldestTimestamp);
     return newMessages;
   }
+
+  static async SendMessageAsync(userId, messageText) {
+    await ChatRepository.CreateMessageAsync(userId, messageText);
+  }
 }
 
 module.exports = { ChatBusiness };

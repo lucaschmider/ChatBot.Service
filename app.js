@@ -6,6 +6,7 @@ const admin = require("firebase-admin");
 const { ConfigService } = require("./ConfigService");
 const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 async function startup(configuration) {
   console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
@@ -37,6 +38,7 @@ async function startup(configuration) {
   try {
     console.log(chalk.yellow("Configuring routers and middleware"));
     app.use(cors());
+    app.use(bodyParser.json());
     app.use("/", Controllers.getRouter());
 
     app.listen(configuration.applicationPort, () => {

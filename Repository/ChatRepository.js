@@ -7,10 +7,10 @@ class ChatRepository {
    * @param {string} obj.receipient The receipient of the message
    * @param {string} obj.message The text of the message
    */
-  static async CreateMessageAsync({ receipient, message }) {
+  static async CreateMessageAsync(receipient, messageText) {
     const doc = await MessageModel.create({
       receipient: receipient,
-      message: message
+      message: messageText
     });
 
     return doc.toObject();
