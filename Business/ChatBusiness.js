@@ -9,7 +9,9 @@ class ChatBusiness {
     if (newMessages.length === 0) return newMessages;
     const oldestTimestamp = newMessages[0].create_date.getTime();
     await ChatRepository.DeleteMessagesForUserOlderThan(userId, oldestTimestamp);
-    return newMessages;
+    return newMessages.map((message) => {
+      return { message: message.message, timestamp: message.create_date.getTime() };
+    });
   }
 
   static async SendMessageAsync(userId, messageText) {

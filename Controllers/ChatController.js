@@ -21,6 +21,7 @@ class ChatController {
    */
   static async GetChatMessagesAsync(req, res) {
     const data = await ChatBusiness.ReadMessagesOfUserAsync(req.userData.uid);
+    res.setHeader("Cache-Control", "no-cache");
     res.send(data);
   }
 
