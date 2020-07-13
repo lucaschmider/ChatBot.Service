@@ -13,6 +13,7 @@ class DialogFlowService {
 
     return {
       isCompleted: result.allRequiredParamsPresent,
+      detectedIntent: result.intent.name,
       answerText: result.fulfillmentText,
       parameters
     };

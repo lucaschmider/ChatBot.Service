@@ -24,7 +24,10 @@ class ChatBusiness {
       await ChatRepository.CreateMessageAsync(userId, answer.answerText);
     }
 
-    if (answer.isCompleted) {
+    if (
+      answer.isCompleted &&
+      answer.detectedIntent === "projects/hidden-howl-282919/agent/intents/a64a74e9-afa5-4dd0-b533-9a90e3a3c3ad"
+    ) {
       await ChatRepository.CreateMessageAsync(
         userId,
         `Ok, ein ${answer.parameters.keyword} nach ${answer.parameters.definitiontype} ist [...].`
