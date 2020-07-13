@@ -33,6 +33,7 @@ class ChatController {
   static async SendChatMessageAsync(req, res) {
     try {
       await ChatBusiness.SendMessageAsync(req.userData.uid, req.body.message);
+      res.status(204).send();
     } catch (error) {
       console.log(chalk.red("An unhandled error occured:\n"), error);
       res.status(500).send();
