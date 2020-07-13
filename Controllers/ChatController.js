@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { ChatBusiness } = require("../Business/ChatBusiness");
 
 class ChatController {
   /**
@@ -17,16 +18,7 @@ class ChatController {
    * @param {Response} res
    */
   static async GetChatMessagesAsync(req, res) {
-    const data = [
-      {
-        message: "Das ist eine Nachricht vom Server",
-        timestamp: Date.now()
-      },
-      {
-        message: "Das ist eine andere Nachricht vom Server",
-        timestamp: Date.now()
-      }
-    ];
+    const data = await ChatBusiness.ReadMessagesOfUserAsync(req.userData.uid);
     res.send(data);
   }
 }
