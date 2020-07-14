@@ -26,13 +26,13 @@ class ChatController {
   }
 
   /**
-   * Dummy. Writes a message to the queue for an echo test
+   * Forwards a message to DialogFlow to extract question information
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
   static async SendChatMessageAsync(req, res) {
     try {
-      await ChatBusiness.SendMessageAsync(req.userData.uid, req.body.message);
+      await ChatBusiness.HandleMessageAsync(req.userData.uid, req.body.message);
       res.status(204).send();
     } catch (error) {
       console.log(chalk.red("An unhandled error occured:\n"), error);

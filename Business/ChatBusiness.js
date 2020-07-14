@@ -1,4 +1,6 @@
 const { ChatRepository } = require("../Repository/ChatRepository");
+const { DialogFlowService } = require("../Services/DialogFlowService");
+const { ConfigService } = require("../Services/ConfigService");
 
 class ChatBusiness {
   static async ReadMessagesOfUserAsync(userId) {
@@ -14,8 +16,25 @@ class ChatBusiness {
     });
   }
 
-  static async SendMessageAsync(userId, messageText) {
-    await ChatRepository.CreateMessageAsync(userId, messageText);
+  static async HandleMessageAsync(userId, messageText) {
+    const answer = await DialogFlowService.HandleMessage(userId, messageText);
+
+    if (answer.isCompleted && answer.detectedIntent === ConfigService.loadedConfiguration.dialoflowIntent) {
+      await this.AnswerQuestionAsync(userId, answer.parameters);
+      return;
+    }
+
+    if (answer && answer.answerText.length > 0) {
+      await ChatRepository.CreateMessageAsync(userId, answer.answerText);
+      return;
+    }
+  }
+
+  static async AnswerQuestionAsync(userId, parameters) {
+    await ChatRepository.CreateMessageAsync(
+      userId,
+      `Ok, ein ${parameters.keyword} nach ${parameters.definitiontype} ist [...].`
+    );
   }
 }
 

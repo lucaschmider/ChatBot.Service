@@ -6,9 +6,8 @@ class ConfigService {
 
   static Create(environmentName) {
     return new Promise((resolve, reject) => {
-      const exampleConfigPath = path.join(__dirname, "env_example.json");
-
-      const configPath = path.join(__dirname, `env_${environmentName.toLowerCase()}.json`);
+      const exampleConfigPath = path.join(__dirname, "..", "env_example.json");
+      const configPath = path.join(__dirname, "..", `env_${environmentName.toLowerCase()}.json`);
 
       if (!fs.existsSync(exampleConfigPath)) {
         reject(`Could not locate example configuration at ${exampleConfigPath}.`);
