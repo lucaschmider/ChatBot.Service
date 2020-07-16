@@ -18,8 +18,7 @@ class ChatBusiness {
 
   static async HandleMessageAsync(userId, messageText) {
     const answer = await DialogFlowService.HandleMessage(userId, messageText);
-
-    if (answer.isCompleted && answer.detectedIntent === ConfigService.loadedConfiguration.dialoflowIntent) {
+    if (answer.isCompleted && answer.detectedIntent === ConfigService.loadedConfiguration.dialogflowIntent) {
       await this.AnswerQuestionAsync(userId, answer.parameters);
       return;
     }
