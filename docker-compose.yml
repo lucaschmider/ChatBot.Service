@@ -1,0 +1,14 @@
+version: "3.1"
+services:
+  chatbot-service:
+    image: aadb880af2df
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./env_docker.json:/etc/env.json
+    environment:
+      - USE_CONFIG_FILE=/etc/env.json
+  mongo:
+    image: mongo
+  influxdb:
+    image: influxdb
