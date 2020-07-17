@@ -1,6 +1,10 @@
 const Influx = require("influx");
 
 class InfluxService {
+  /**
+   * @private
+   * @type {Influx.InfluxDB}
+   */
   static __connection;
   static async CreateConnection({ host, database }) {
     InfluxService.__connection = new Influx.InfluxDB({
@@ -16,6 +20,11 @@ class InfluxService {
         }
       ]
     });
+
+    const currentDatabases = await this.__connection.getDatabaseNames();
+    if (!currentDatabases.includes(database)) {
+      await this.__connection.createDatabase(database);
+    }
   }
 
   /**

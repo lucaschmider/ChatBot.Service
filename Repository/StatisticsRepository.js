@@ -1,11 +1,13 @@
 const { InfluxService } = require("../Services/InfluxService");
+const { ConfigService } = require("../Services/ConfigService");
+
 class StatisticsRepository {
   /**
    * Returns the average rating by department
    */
   static async GetStatisticsAsync() {
     const data = await InfluxService.GetConnection().query(
-      `SELECT mean("rating") FROM "chatbot"."autogen"."user_satisfaction" GROUP BY time(5s), "department"`
+      `SELECT mean("rating") FROM "user_satisfaction" GROUP BY time(30m), "department" FILL(previous)`
     );
     return data.groups().map((group) => {
       return {
