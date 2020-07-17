@@ -3,5 +3,6 @@
   "databaseUrl": "",
   "environment": "",
   "firebase": {},
-  "dialogflow": {}
+  "dialogflow": {},
+  "influx": {}
 }

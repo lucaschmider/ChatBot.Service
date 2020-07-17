@@ -7,6 +7,7 @@ const { ConfigService } = require("./Services/ConfigService");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { InfluxService } = require("./Services/InfluxService");
 
 async function startup(configuration) {
   console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
@@ -32,6 +33,15 @@ async function startup(configuration) {
     console.log(chalk.green("Successfully initialized Firebase"));
   } catch (error) {
     console.error(chalk.red("Error occured while initializing Firebase:\n", error));
+    return;
+  }
+
+  try {
+    console.log(chalk.yellow("Connecting to influx db"));
+    await InfluxService.CreateConnection(ConfigService.loadedConfiguration.influx);
+    console.log(chalk.green("Successfully connected to influx db"));
+  } catch (error) {
+    console.error(chalk.red("Error occured while connecting to influx db:\n", error));
     return;
   }
 
