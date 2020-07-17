@@ -11,13 +11,7 @@ class StatisticsBusiness {
     const userData = await UserRepository.GetUserDataForUserAsync(userId);
     const department = userData.department;
 
-    const ratingData = {
-      rating,
-      department
-    };
-
-    console.log(ratingData);
-    throw new Error("Not implemented!");
+    await StatisticsRepository.RegisterFeedback(rating, department);
   }
 }
 

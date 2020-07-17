@@ -37,9 +37,9 @@ async function startup(configuration) {
   }
 
   try {
-    console.log(chalk.yellow("Connecting to influx db"));
+    console.log(chalk.yellow("Connecting to InfluxDb"));
     await InfluxService.CreateConnection(ConfigService.loadedConfiguration.influx);
-    console.log(chalk.green("Successfully connected to influx db"));
+    console.log(chalk.green("Successfully connected to InfluxDb"));
   } catch (error) {
     console.error(chalk.red("Error occured while connecting to influx db:\n", error));
     return;
