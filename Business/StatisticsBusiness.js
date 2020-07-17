@@ -4,7 +4,15 @@ const { UserRepository } = require("../Repository/UserRepository");
 class StatisticsBusiness {
   static async GetUserSatisfactionAsync() {
     const data = await StatisticsRepository.GetStatisticsAsync();
-    return data;
+    const result = [];
+    data.forEach((department) => {
+      result.push({
+        department: department.department,
+        ratings: department.ratings.filter((rating) => !!rating.rating)
+      });
+    });
+    console.log(JSON.stringify(result));
+    return result;
   }
 
   static async ProccessFeedbackAsync(userId, rating) {
