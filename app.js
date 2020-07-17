@@ -8,6 +8,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { InfluxService } = require("./Services/InfluxService");
+const { StatisticsRepository } = require("./Repository/StatisticsRepository");
 
 async function startup(configuration) {
   console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
