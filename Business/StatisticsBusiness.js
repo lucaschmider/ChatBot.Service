@@ -11,7 +11,6 @@ class StatisticsBusiness {
         ratings: department.ratings.filter((rating) => !!rating.rating)
       });
     });
-    console.log(JSON.stringify(result));
     return result;
   }
 
