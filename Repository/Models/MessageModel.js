@@ -9,6 +9,11 @@ const messageSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  conversationFinished: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   create_date: {
     type: Date,
     default: Date.now

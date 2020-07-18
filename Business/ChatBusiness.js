@@ -12,7 +12,11 @@ class ChatBusiness {
     const oldestTimestamp = newMessages[0].create_date.getTime();
     await ChatRepository.DeleteMessagesForUserOlderThan(userId, oldestTimestamp);
     return newMessages.map((message) => {
-      return { message: message.message, timestamp: message.create_date.getTime() };
+      return {
+        message: message.message,
+        timestamp: message.create_date.getTime(),
+        conversationFinished: message.conversationFinished
+      };
     });
   }
 
@@ -32,7 +36,8 @@ class ChatBusiness {
   static async AnswerQuestionAsync(userId, parameters) {
     await ChatRepository.CreateMessageAsync(
       userId,
-      `Ok, ein ${parameters.keyword} nach ${parameters.definitiontype} ist [...].`
+      `Ok, ein ${parameters.keyword} nach ${parameters.definitiontype} ist [...].`,
+      true
     );
   }
 }
