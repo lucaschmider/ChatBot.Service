@@ -1,14 +1,14 @@
 const chalk = require("chalk");
 const express = require("express");
 const mongoose = require("mongoose");
-const { Controllers } = require("./Controllers");
 const admin = require("firebase-admin");
-const { ConfigService } = require("./Services/ConfigService");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { ConfigService } = require("./Services/ConfigService");
+const { Controllers } = require("./Controllers");
+const { DataIntegrityService } = require("./Services/DataIntegrityService");
 const { InfluxService } = require("./Services/InfluxService");
-const { StatisticsRepository } = require("./Repository/StatisticsRepository");
 
 async function startup(configuration) {
   console.log(chalk.yellow(`Starting application for environment ${configuration.environment}`));
@@ -43,6 +43,15 @@ async function startup(configuration) {
     console.log(chalk.green("Successfully connected to InfluxDb"));
   } catch (error) {
     console.error(chalk.red("Error occured while connecting to influx db:\n", error));
+    return;
+  }
+
+  try {
+    console.log(chalk.yellow("Ensuring that all required data is present"));
+    await DataIntegrityService.EnsureIntegrity();
+    console.log(chalk.green("All required data is present."));
+  } catch (error) {
+    console.error(chalk.red("Error while creating required data:\n", error));
     return;
   }
 
