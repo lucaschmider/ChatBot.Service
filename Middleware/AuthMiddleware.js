@@ -31,7 +31,6 @@ class AuthMiddleware {
         const { authToken } = req;
         const userInfo = await admin.auth().verifyIdToken(authToken);
         const userData = await UserRepository.GetUserDataForUserAsync(userInfo.uid);
-
         if (!userData) {
           console.warn(chalk.yellow("No UserData found for authenticated user:\n", JSON.stringify(userInfo)));
           return res.status(401).send({ error: "You are not authorized to make this request" });
@@ -52,7 +51,8 @@ class AuthMiddleware {
    * @private
    */
   static handleError(error) {
-    console.log(chalk.yellow(`Authentification error: ${error.code}`));
+    console.log(error);
+    console.log(chalk.yellow(`Authentification error: ${error.errorInfo.code}`));
   }
 }
 
