@@ -1,5 +1,6 @@
 const chalk = require("chalk");
 const { Router } = require("express");
+const { MasterDataRepository } = require("../Repository/MasterDataRepository");
 
 class MasterDataController {
   /**
@@ -8,7 +9,7 @@ class MasterDataController {
    */
   static getRouter() {
     const router = Router();
-    router.get("/departments", MasterDataController.GetDepartments);
+    router.get("/departments", MasterDataController.GetDepartmentsAsync);
     return router;
   }
 
@@ -17,19 +18,14 @@ class MasterDataController {
    * @param {Request} req
    * @param {Response} res
    */
-  static GetDepartments(req, res) {
+  static async GetDepartmentsAsync(req, res) {
     if (!req.userData.isAdmin) {
       res.status(401).send();
       return;
     }
-    res.json([
-      "Human Resources",
-      "External Sales",
-      "IT-Department",
-      "Key Accounts",
-      "Manufacturing Radar",
-      "Manufacturing Capacitive"
-    ]);
+
+    const departments = await MasterDataRepository.GetAllData("departments");
+    res.json(departments.map((department) => department.departmentName));
   }
 }
 

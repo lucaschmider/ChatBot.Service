@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
 const { UserRepository } = require("../Repository/UserRepository");
+const { MasterDataRepository } = require("../Repository/MasterDataRepository");
 const { UserCreationResult } = require("./Models/UserCreationResult");
 const chalk = require("chalk");
 class UserBusiness {
@@ -18,6 +19,13 @@ class UserBusiness {
 
       if (!user.email || !user.password || !user.department || !user.name) {
         throw new Error({ code: "schema/inclomplete-data" });
+      }
+
+      const validDepartments = (await MasterDataRepository.GetAllData("departments")).map(
+        (department) => department.departmentName
+      );
+      if (!validDepartments.includes(user.department)) {
+        throw new Error({ code: "information/invalid-department" });
       }
 
       const userRecord = await auth.createUser({
