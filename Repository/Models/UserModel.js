@@ -9,13 +9,17 @@ const userSchema = mongoose.Schema({
   isAdmin: {
     type: Boolean,
     required: true,
-    defaut: Date.now
+    defaut: false
   },
   name: {
     type: String,
     required: false
   },
   department: {
+    type: String,
+    required: true
+  },
+  email: {
     type: String,
     required: true
   },
