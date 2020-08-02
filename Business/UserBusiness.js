@@ -2,6 +2,15 @@ const admin = require("firebase-admin");
 const { UserRepository } = require("../Repository/UserRepository");
 const chalk = require("chalk");
 class UserBusiness {
+  /**
+   * Validates and creates the specified user
+   * @param {object} user
+   * @param {string} user.email
+   * @param {string} user.password
+   * @param {string} user.department
+   * @param {string} user.name
+   * @param {boolean} user.isAdmin
+   */
   static async CreateUserAsync(user) {
     try {
       const auth = admin.auth();
