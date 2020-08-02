@@ -71,7 +71,6 @@ class UserController {
 
     try {
       const createUserResult = await UserBusiness.CreateUserAsync(req.body);
-      console.log(createUserResult);
 
       if (createUserResult.error) {
         res.status(400).json({ reason: createUserResult.reason });

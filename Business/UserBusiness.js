@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
 const { UserRepository } = require("../Repository/UserRepository");
+const { UserCreationResult } = require("./Models/UserCreationResult");
 const chalk = require("chalk");
 class UserBusiness {
   /**
@@ -34,34 +35,11 @@ class UserBusiness {
       };
 
       await UserRepository.CreateUserAsync(userData);
-
-      return {
-        user: {
-          uid: userRecord.uid,
-          name: user.name,
-          isAdmin: user.isAdmin,
-          department: user.department,
-          email: user.email
-        },
-        error: false,
-        reason: null
-      };
+      return UserCreationResult.CreateForSuccess(userData);
     } catch (error) {
       console.log("Business Error: " + error);
-      if (error.code == "auth/email-already-exists") {
-        return {
-          error: true,
-          reason: error.code,
-          user: null
-        };
-      }
-
-      if (error.code == "schema/incomplete-data") {
-        return {
-          error: true,
-          reason: error.code,
-          user: null
-        };
+      if (error.code == "auth/email-already-exists" || error.code == "schema/incomplete-data") {
+        return UserCreationResult.CreateForError(error.code);
       }
 
       console.log(
