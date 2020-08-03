@@ -35,7 +35,8 @@ class DataIntegrityService {
           department: "IT-Department",
           isAdmin: true,
           name: "Admin User",
-          uid: "4ZsA71pqHvRL2yKyvHiWK3TGGo02"
+          uid: "4ZsA71pqHvRL2yKyvHiWK3TGGo02",
+          email: "max.mustermann@gmail.com"
         });
       }
 
