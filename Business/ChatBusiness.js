@@ -1,6 +1,7 @@
 const { ChatRepository } = require("../Repository/ChatRepository");
 const { DialogFlowService } = require("../Services/DialogFlowService");
 const { ConfigService } = require("../Services/ConfigService");
+const { KnowledgeRepository } = require("../Repository/KnowledgeRepository");
 
 class ChatBusiness {
   static async ReadMessagesOfUserAsync(userId) {
@@ -34,11 +35,11 @@ class ChatBusiness {
   }
 
   static async AnswerQuestionAsync(userId, parameters) {
-    await ChatRepository.CreateMessageAsync(
-      userId,
-      `Ok, ein ${parameters.keyword} nach ${parameters.definitiontype} ist [...].`,
-      true
+    const description = await KnowledgeRepository.GetDefinitionByKeywordAndDefinitionTypeAsync(
+      parameters.keyword,
+      parameters.definitiontype
     );
+    await ChatRepository.CreateMessageAsync(userId, description, true);
   }
 }
 
