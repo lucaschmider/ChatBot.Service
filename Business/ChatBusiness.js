@@ -2,6 +2,7 @@ const { ChatRepository } = require("../Repository/ChatRepository");
 const { DialogFlowService } = require("../Services/DialogFlowService");
 const { ConfigService } = require("../Services/ConfigService");
 const { KnowledgeRepository } = require("../Repository/KnowledgeRepository");
+const chalk = require("chalk");
 
 class ChatBusiness {
   static async ReadMessagesOfUserAsync(userId) {
@@ -35,11 +36,17 @@ class ChatBusiness {
   }
 
   static async AnswerQuestionAsync(userId, parameters) {
-    const description = await KnowledgeRepository.GetDefinitionByKeywordAndDefinitionTypeAsync(
-      parameters.keyword,
-      parameters.definitiontype
-    );
-    await ChatRepository.CreateMessageAsync(userId, description, true);
+    try {
+      const description = await KnowledgeRepository.GetDefinitionByKeywordAndDefinitionTypeAsync(
+        parameters.keyword,
+        parameters.definitiontype
+      );
+      await ChatRepository.CreateMessageAsync(userId, description, true);
+    } catch (error) {
+      console.log(
+        chalk.red(`An unexpected error occured while answering a question (${JSON.stringify(parameters)})\n`, error)
+      );
+    }
   }
 }
 
