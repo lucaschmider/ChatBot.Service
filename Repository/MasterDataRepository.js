@@ -23,7 +23,7 @@ class MasterDataRepository {
    */
   static async GetAllData(collection) {
     if (!this.#allowedCollections.includes(collection)) {
-      throw new Error("This collection is not meant to be used with the MasterDataRepository.");
+      throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
 
     switch (collection) {
@@ -50,7 +50,7 @@ class MasterDataRepository {
    */
   static async GetCollectionScheme(collection) {
     if (!this.#allowedCollections.includes(collection)) {
-      throw new Error("This collection is not meant to be used with the MasterDataRepository.");
+      throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
     return this.#collectionSchemes.find((x) => x.collection == collection);
   }

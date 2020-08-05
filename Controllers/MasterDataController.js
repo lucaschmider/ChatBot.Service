@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const { Router } = require("express");
 const { MasterDataRepository } = require("../Repository/MasterDataRepository");
-
+const { MasterDataBusiness } = require("../Business/MasterDataBusiness");
 class MasterDataController {
   /**
    * Returns a router instance representing the StatisticsController
@@ -42,8 +42,8 @@ class MasterDataController {
     }
 
     try {
+      await MasterDataBusiness.GetKnowledgebaseAsync();
       const knowledgebase = await MasterDataRepository.GetAllData("knowledge");
-      console.log(knowledgebase);
       res.json(knowledgebase);
     } catch (error) {
       console.log(chalk.yellow("Bad Request while getting knowledgebase:\n", error));

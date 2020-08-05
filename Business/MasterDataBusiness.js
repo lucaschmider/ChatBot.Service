@@ -1,9 +1,10 @@
 const { MasterDataRepository } = require("../Repository/MasterDataRepository");
+const { DialogFlowService } = require("../Services/DialogFlowService");
 
-export class MasterDataBusiness {
+class MasterDataBusiness {
   static async GetKnowledgebaseAsync() {
+    await DialogFlowService.GetEntities();
     const knowledgebase = await MasterDataRepository.GetAllData("knowledge");
-    console.log(knowledgebase);
   }
 }
 
