@@ -1,21 +1,58 @@
+const { connection } = require("mongoose");
+
 class MasterDataRepository {
-  static #allowedCollections = ["departments"];
+  static #allowedCollections = ["departments", "knowledge"];
+  static #collectionSchemes = [
+    {
+      collection: "departments",
+      fields: [{ key: "departmentName", name: "Abteilung" }]
+    },
+    {
+      collection: "knowledgebase",
+      fields: [
+        { key: "name", name: "Titel" },
+        { key: "keywords", name: "Synonyme (Kommasepariert)" },
+        { key: "definitiontype", name: "Definition" },
+        { key: "description", name: "Beschreibung" }
+      ]
+    }
+  ];
+  /**
+   * Returns all documents contained in the specified collection
+   * @param {string} collection The name of the collection to load
+   */
   static async GetAllData(collection) {
     if (!this.#allowedCollections.includes(collection)) {
       throw new Error("This collection is not meant to be used with the MasterDataRepository.");
     }
-    if (collection == "departments") {
-      return new Promise((resolve) =>
-        resolve([
-          { departmentName: "Human Resources" },
-          { departmentName: "External Sales" },
-          { departmentName: "IT-Department" },
-          { departmentName: "Key Accounts" },
-          { departmentName: "Manufacturing Radar" },
-          { departmentName: "Manufacturing Capacitive" }
-        ])
-      );
+
+    switch (collection) {
+      case "departments":
+        return new Promise((resolve) =>
+          resolve([
+            { departmentName: "Human Resources", id: "0" },
+            { departmentName: "External Sales", id: "1" },
+            { departmentName: "IT-Department", id: "2" },
+            { departmentName: "Key Accounts", id: "3" },
+            { departmentName: "Manufacturing Radar", id: "4" },
+            { departmentName: "Manufacturing Capacitive", id: "5" }
+          ])
+        );
+
+      default:
+        return connection.db.collection(collection).find().toArray();
     }
+  }
+
+  /**
+   * Returns a list of all fields along with a display friendly name of the specified collection
+   * @param {string} collection The name of the collection
+   */
+  static async GetCollectionScheme(collection) {
+    if (!this.#allowedCollections.includes(collection)) {
+      throw new Error("This collection is not meant to be used with the MasterDataRepository.");
+    }
+    return this.#collectionSchemes.find((x) => x.collection == collection);
   }
 }
 

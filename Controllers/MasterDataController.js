@@ -9,12 +9,14 @@ class MasterDataController {
    */
   static getRouter() {
     const router = Router();
-    router.get("/departments", MasterDataController.GetDepartmentsAsync);
+    router.get("/data/departments", MasterDataController.GetDepartmentsAsync);
+    router.get("/data/knowledgebase", MasterDataController.GetKnowledgebaseAsync);
+    router.get("/scheme/:collection", MasterDataController.GetCollectionSchemeAsync);
     return router;
   }
 
   /**
-   * Returns user satifaction
+   * Returns a list of registered departments
    * @param {Request} req
    * @param {Response} res
    */
@@ -24,8 +26,49 @@ class MasterDataController {
       return;
     }
 
-    const departments = await MasterDataRepository.GetAllData("departments");
+    const departments = await MasterDataRepository.GetAllData(req.params.collection);
     res.json(departments.map((department) => department.departmentName));
+  }
+
+  /**
+   * Returns a list of known definitions
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async GetKnowledgebaseAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    try {
+      const knowledgebase = await MasterDataRepository.GetAllData("knowledge");
+      console.log(knowledgebase);
+      res.json(knowledgebase);
+    } catch (error) {
+      console.log(chalk.yellow("Bad Request while getting knowledgebase:\n", error));
+      res.status(400).send();
+    }
+  }
+
+  /**
+   * Returns the scheme for the specified collection
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async GetCollectionSchemeAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    try {
+      const scheme = await MasterDataRepository.GetCollectionScheme(req.params.collection);
+      res.json(scheme);
+    } catch (error) {
+      console.log(chalk.yellow("Bad Request while getting collection scheme:\n", error));
+      res.status(400).send();
+    }
   }
 }
 

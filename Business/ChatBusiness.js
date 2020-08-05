@@ -43,6 +43,11 @@ class ChatBusiness {
       );
       await ChatRepository.CreateMessageAsync(userId, description, true);
     } catch (error) {
+      await ChatRepository.CreateMessageAsync(
+        userId,
+        `Entschuldige, im Moment kann ich dir nicht erklären, was ein ${parameters.keyword} nach ${parameters.definitiontype} ist.`,
+        true
+      );
       console.log(
         chalk.red(`An unexpected error occured while answering a question (${JSON.stringify(parameters)})\n`, error)
       );
