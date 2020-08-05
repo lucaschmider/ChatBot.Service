@@ -10,7 +10,7 @@ class MasterDataController {
   static getRouter() {
     const router = Router();
     router.get("/data/departments", MasterDataController.GetDepartmentsAsync);
-    router.get("/data/knowledgebase", MasterDataController.GetKnowledgebaseAsync);
+    router.get("/data/knowledge", MasterDataController.GetKnowledgebaseAsync);
     router.get("/scheme/:collection", MasterDataController.GetCollectionSchemeAsync);
     return router;
   }
@@ -42,8 +42,7 @@ class MasterDataController {
     }
 
     try {
-      await MasterDataBusiness.GetKnowledgebaseAsync();
-      const knowledgebase = await MasterDataRepository.GetAllData("knowledge");
+      const knowledgebase = await MasterDataBusiness.GetKeywordsAsync();
       res.json(knowledgebase);
     } catch (error) {
       console.log(chalk.yellow("Bad Request while getting knowledgebase:\n", error));

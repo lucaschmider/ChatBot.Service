@@ -8,7 +8,7 @@ class MasterDataRepository {
       fields: [{ key: "departmentName", name: "Abteilung" }]
     },
     {
-      collection: "knowledgebase",
+      collection: "knowledge",
       fields: [
         { key: "name", name: "Titel" },
         { key: "keywords", name: "Synonyme (Kommasepariert)" },
@@ -20,6 +20,7 @@ class MasterDataRepository {
   /**
    * Returns all documents contained in the specified collection
    * @param {string} collection The name of the collection to load
+   * @returns {Promise<any[]>}
    */
   static async GetAllData(collection) {
     if (!this.#allowedCollections.includes(collection)) {
