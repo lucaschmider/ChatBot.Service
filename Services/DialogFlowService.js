@@ -77,16 +77,12 @@ class DialogFlowService {
     // The path to the agent the entity types belong to.
     const agentPath = entityTypesClient.agentPath(configuration.project_id);
 
-    const request = {
-      parent: agentPath
-    };
-
     // DefinitionType Path:
     // Call the client library to retrieve a list of all existing entity types.
     // const response = await entityTypesClient.listEntityTypes(request);
 
     const [response] = await entityTypesClient.getEntityType({
-      name: ""
+      name: entityTypeName
     });
     return response.entities;
   }
