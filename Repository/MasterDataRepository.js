@@ -62,12 +62,10 @@ class MasterDataRepository {
    * @param {any} data
    */
   static async InsertCollectionData(collection, data) {
-    console.log("5.1.1");
     if (!this.#allowedCollections.includes(collection)) {
       throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
 
-    console.log("5.1.2");
     return connection.db.collection(collection).insertOne(data);
   }
 }

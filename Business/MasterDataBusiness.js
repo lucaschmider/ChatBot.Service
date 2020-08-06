@@ -4,8 +4,9 @@ const { CreateKnowledgeResult } = require("./Models/CreateKnowledgeResult");
 
 class MasterDataBusiness {
   static async GetKeywordsAsync() {
+    const dialogFlowService = await DialogFlowService.getInstance();
     const knowledgebase = await MasterDataRepository.GetAllData("knowledge");
-    const keywords = await DialogFlowService.GetKeywordsAsync();
+    const keywords = await dialogFlowService.GetKeywordsAsync();
 
     const result = knowledgebase.map((knownWord) => {
       const mappedKeyword = keywords.find((keyword) => keyword.value == knownWord.keyword);
@@ -37,42 +38,39 @@ class MasterDataBusiness {
       !(knowledge.synonyms instanceof Array) ||
       knowledge.synonyms.find((synonym) => typeof synonym !== "string")
     ) {
-      return CreateKnowledgeResult.CreateForError("The provided object was malformed");
+      return CreateKnowledgeResult.CreateForError("The provided object was malformed", "validation/malformed");
     }
 
-    console.log("1");
-    const validDefinitionTypes = (await DialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
+    const dialogFlowService = await DialogFlowService.getInstance();
+    const validDefinitionTypes = (await dialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
     if (!validDefinitionTypes.includes(knowledge.definitiontype)) {
-      return CreateKnowledgeResult.CreateForError("Specified Definitiontype does not exist");
+      return CreateKnowledgeResult.CreateForError(
+        "Specified Definitiontype does not exist",
+        "validation/invalid-definition-type"
+      );
     }
 
-    console.log("2");
-    const existingKnowledge = (await DialogFlowService.GetKeywordsAsync()).map((k) => k.value);
+    const existingKnowledge = (await dialogFlowService.GetKeywordsAsync()).map((k) => k.value);
     if (existingKnowledge.includes(knowledge.name)) {
-      return CreateKnowledgeResult.CreateForError("Knowledge already exists");
+      return CreateKnowledgeResult.CreateForError("Knowledge already exists", "validation/already-exists");
     }
 
-    console.log("3");
     const databaseObject = {
-      definitiontype: knowledge.definitiontype,
+      definitionType: knowledge.definitiontype,
       keyword: knowledge.name,
       description: knowledge.description
     };
 
-    console.log("4");
     const dialogFlowObject = {
       value: knowledge.name,
       synonyms: knowledge.synonyms
     };
 
-    console.log("5");
-    const dialogFlowService = await DialogFlowService.getInstance();
     await Promise.all([
       MasterDataRepository.InsertCollectionData("knowledge", databaseObject),
       dialogFlowService.CreateKnowledge(dialogFlowObject)
     ]);
 
-    console.log("6");
     return CreateKnowledgeResult.CreateForSuccess();
   }
 }

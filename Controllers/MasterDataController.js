@@ -82,19 +82,19 @@ class MasterDataController {
       return;
     }
 
-    // try {
-    const result = await MasterDataBusiness.CreateKnowledgeAsync(req.body);
+    try {
+      const result = await MasterDataBusiness.CreateKnowledgeAsync(req.body);
 
-    if (result.error) {
-      res.status(400).send(result.reason);
-      return;
+      if (result.error) {
+        res.status(400).send(result.code);
+        return;
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).send();
+      console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
     }
-
-    res.status(204).send();
-    // } catch (error) {
-    //   res.status(500).send();
-    //   console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
-    // }
   }
 }
 

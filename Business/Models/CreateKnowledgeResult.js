@@ -10,6 +10,11 @@ class CreateKnowledgeResult {
   reason;
 
   /**
+   * @type {string}
+   */
+  code;
+
+  /**
    * Creates a new instance of the CreateKnowledgeResult-Class
    * @private
    * @param {boolean} error
@@ -31,7 +36,7 @@ class CreateKnowledgeResult {
    * Creates a new CreateKnowledgeResult for a failed request
    * @param {string} reason
    */
-  static CreateForError(reason) {
+  static CreateForError(reason, code) {
     return new CreateKnowledgeResult(true, reason);
   }
 }

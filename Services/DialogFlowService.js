@@ -91,19 +91,15 @@ class DialogFlowService {
   /**
    * Returns all DefinitionTypes alongside with their synonyms
    */
-  static GetDefinitionTypesAsync() {
-    return DialogFlowService.GetEntities(
-      "projects/hidden-howl-282919/agent/entityTypes/2bf0d912-ae7a-4bd1-a929-448384dc1ba6"
-    );
+  GetDefinitionTypesAsync() {
+    return this.GetEntitiesAsync("projects/hidden-howl-282919/agent/entityTypes/2bf0d912-ae7a-4bd1-a929-448384dc1ba6");
   }
 
   /**
    * Returns all Keywords alongside with their synonyms
    */
-  static GetKeywordsAsync() {
-    return DialogFlowService.GetEntities(
-      "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63"
-    );
+  GetKeywordsAsync() {
+    return this.GetEntitiesAsync("projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63");
   }
 
   /**
@@ -111,21 +107,10 @@ class DialogFlowService {
    * @private
    * @param {string} entityTypeName
    */
-  static async GetEntities(entityTypeName) {
-    const configuration = ConfigService.loadedConfiguration.dialogflow;
-    // Instantiates clients
-    const entityTypesClient = new dialogflow.EntityTypesClient({
-      credentials: configuration
-    });
-
-    // DefinitionType Path:
-    // Call the client library to retrieve a list of all existing entity types.
-    // const response = await entityTypesClient.listEntityTypes(request);
-
-    const [response] = await entityTypesClient.getEntityType({
-      name: entityTypeName
-    });
-    return response.entities;
+  async GetEntitiesAsync(entityTypeName) {
+    const url = `${DialogFlowService.#dialogFlowBaseUrl}/${entityTypeName}`;
+    const response = await this.#client.request({ url });
+    return response.data.entities;
   }
 
   /**
