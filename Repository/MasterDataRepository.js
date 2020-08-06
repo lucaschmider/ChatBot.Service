@@ -68,6 +68,19 @@ class MasterDataRepository {
 
     return connection.db.collection(collection).insertOne(data);
   }
+
+  /**
+   * Deletes all data matching the criteria
+   * @param {string} collection
+   * @param {any} criteria
+   */
+  static async DeleteData(collection, criteria) {
+    if (!this.#allowedCollections.includes(collection)) {
+      throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
+    }
+
+    return connection.db.collection(collection).deleteMany(criteria);
+  }
 }
 
 module.exports = { MasterDataRepository };

@@ -130,6 +130,22 @@ class DialogFlowService {
       method: "POST"
     });
   }
+
+  /**
+   * Deletes the specified knowledge
+   * @param {string} term
+   */
+  async deleteKnowledge(term) {
+    const keywordPath = "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63";
+    const url = `${DialogFlowService.#dialogFlowBaseUrl}/${keywordPath}/entities:batchDelete`;
+    this.#client.request({
+      url,
+      data: {
+        entities: [term]
+      },
+      method: "POST"
+    });
+  }
 }
 
 module.exports = { DialogFlowService };

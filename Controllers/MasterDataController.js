@@ -2,6 +2,7 @@ const chalk = require("chalk");
 const { Router } = require("express");
 const { MasterDataRepository } = require("../Repository/MasterDataRepository");
 const { MasterDataBusiness } = require("../Business/MasterDataBusiness");
+const { DialogFlowService } = require("../Services/DialogFlowService");
 class MasterDataController {
   /**
    * Returns a router instance representing the StatisticsController
@@ -12,6 +13,7 @@ class MasterDataController {
     router.get("/data/departments", MasterDataController.GetDepartmentsAsync);
     router.get("/data/knowledge", MasterDataController.GetKnowledgeAsync);
     router.post("/data/knowledge", MasterDataController.CreateKnowledgeAsync);
+    router.delete("/data/knowledge/:Term", MasterDataController.DeleteKnowledgeAsync);
     router.get("/scheme/:collection", MasterDataController.GetCollectionSchemeAsync);
     return router;
   }
@@ -89,6 +91,31 @@ class MasterDataController {
         res.status(400).send(result.code);
         return;
       }
+
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).send();
+      console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
+    }
+  }
+
+  /**
+   * Deletes the knowledge about the specified Term
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async DeleteKnowledgeAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    try {
+      const dialogFlowService = await DialogFlowService.getInstance();
+      await Promise.all([
+        MasterDataRepository.DeleteData("knowledge", { keyword: req.params.Term }),
+        dialogFlowService.deleteKnowledge(req.params.Term)
+      ]);
 
       res.status(204).send();
     } catch (error) {
