@@ -1,7 +1,51 @@
 const dialogflow = require("@google-cloud/dialogflow");
 const { ConfigService } = require("./ConfigService");
+const { Compute, JWT, UserRefreshClient, GoogleAuth } = require("google-auth-library");
 
 class DialogFlowService {
+  /**
+   * @type {DialogFlowService}
+   */
+  static #instance;
+
+  /**
+   * @type {string}
+   */
+  static #dialogFlowBaseUrl = "https://dialogflow.googleapis.com/v2";
+
+  /**
+   * @type {Compute | JWT | UserRefreshClient}
+   */
+  #client;
+
+  /**
+   * Returns the saved ServiceInstance
+   */
+  static async getInstance() {
+    if (!DialogFlowService.#instance) {
+      const auth = new GoogleAuth({
+        credentials: {
+          private_key: ConfigService.loadedConfiguration.dialogflow.private_key,
+          client_email: ConfigService.loadedConfiguration.dialogflow.client_email
+        },
+        scopes: ["https://www.googleapis.com/auth/cloud-platform", "https://www.googleapis.com/auth/dialogflow"]
+      });
+      const client = await auth.getClient();
+      DialogFlowService.#instance = new DialogFlowService(client);
+    }
+
+    return DialogFlowService.#instance;
+  }
+
+  /**
+   * Creates a new instance of the Service.
+   * @private Use getInstance() instead
+   * @param {Compute | JWT | UserRefreshClient} client
+   */
+  constructor(client) {
+    this.#client = client;
+  }
+
   static async HandleMessage(chatId, message) {
     const responses = await DialogFlowService.SendRequest(chatId, message);
     const result = responses[0].queryResult;
@@ -84,25 +128,21 @@ class DialogFlowService {
     return response.entities;
   }
 
-  static async CreateKnowledge(entity) {
-    console.log("5.2.1");
-    const configuration = ConfigService.loadedConfiguration.dialogflow;
-    // Instantiates clients
-    console.log("5.2.2");
-    const entityTypesClient = new dialogflow.EntityTypesClient({
-      credentials: configuration
-    });
-
-    console.log("5.2.3");
-    entities.push(entity);
-    entityTypesClient.batchCreateEntities({
-      parent: "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63",
-      entities: [
-        {
-          value: "AMK",
-          synonyms: ["test", "probe", "übung"]
-        }
-      ]
+  /**
+   * Creates a new knowledge
+   * @param {object} entity
+   * @param {string} entity.value
+   * @param {string[]} entity.synonyms
+   */
+  async CreateKnowledge(entity) {
+    const keywordPath = "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63";
+    const url = `${DialogFlowService.#dialogFlowBaseUrl}/${keywordPath}/entities:batchCreate`;
+    this.#client.request({
+      url,
+      data: {
+        entities: [entity]
+      },
+      method: "POST"
     });
   }
 }

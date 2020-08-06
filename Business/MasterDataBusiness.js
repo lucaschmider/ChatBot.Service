@@ -66,10 +66,11 @@ class MasterDataBusiness {
     };
 
     console.log("5");
-    await Promise.all(
+    const dialogFlowService = await DialogFlowService.getInstance();
+    await Promise.all([
       MasterDataRepository.InsertCollectionData("knowledge", databaseObject),
-      DialogFlowService.CreateKnowledge(dialogFlowObject)
-    );
+      dialogFlowService.CreateKnowledge(dialogFlowObject)
+    ]);
 
     console.log("6");
     return CreateKnowledgeResult.CreateForSuccess();
