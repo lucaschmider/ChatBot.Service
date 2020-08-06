@@ -83,6 +83,28 @@ class DialogFlowService {
     });
     return response.entities;
   }
+
+  static async CreateKnowledge(entity) {
+    console.log("5.2.1");
+    const configuration = ConfigService.loadedConfiguration.dialogflow;
+    // Instantiates clients
+    console.log("5.2.2");
+    const entityTypesClient = new dialogflow.EntityTypesClient({
+      credentials: configuration
+    });
+
+    console.log("5.2.3");
+    entities.push(entity);
+    entityTypesClient.batchCreateEntities({
+      parent: "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63",
+      entities: [
+        {
+          value: "AMK",
+          synonyms: ["test", "probe", "übung"]
+        }
+      ]
+    });
+  }
 }
 
 module.exports = { DialogFlowService };

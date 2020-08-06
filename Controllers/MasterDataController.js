@@ -10,7 +10,8 @@ class MasterDataController {
   static getRouter() {
     const router = Router();
     router.get("/data/departments", MasterDataController.GetDepartmentsAsync);
-    router.get("/data/knowledge", MasterDataController.GetKnowledgebaseAsync);
+    router.get("/data/knowledge", MasterDataController.GetKnowledgeAsync);
+    router.post("/data/knowledge", MasterDataController.CreateKnowledgeAsync);
     router.get("/scheme/:collection", MasterDataController.GetCollectionSchemeAsync);
     return router;
   }
@@ -35,7 +36,7 @@ class MasterDataController {
    * @param {Request} req
    * @param {Response} res
    */
-  static async GetKnowledgebaseAsync(req, res) {
+  static async GetKnowledgeAsync(req, res) {
     if (!req.userData.isAdmin) {
       res.status(401).send();
       return;
@@ -68,6 +69,32 @@ class MasterDataController {
       console.log(chalk.yellow("Bad Request while getting collection scheme:\n", error));
       res.status(400).send();
     }
+  }
+
+  /**
+   * Creates a new knowledge
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async CreateKnowledgeAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    // try {
+    const result = await MasterDataBusiness.CreateKnowledgeAsync(req.body);
+
+    if (result.error) {
+      res.status(400).send(result.reason);
+      return;
+    }
+
+    res.status(204).send();
+    // } catch (error) {
+    //   res.status(500).send();
+    //   console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
+    // }
   }
 }
 

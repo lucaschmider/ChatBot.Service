@@ -1,5 +1,6 @@
 const { MasterDataRepository } = require("../Repository/MasterDataRepository");
 const { DialogFlowService } = require("../Services/DialogFlowService");
+const { CreateKnowledgeResult } = require("./Models/CreateKnowledgeResult");
 
 class MasterDataBusiness {
   static async GetKeywordsAsync() {
@@ -17,6 +18,61 @@ class MasterDataBusiness {
       };
     });
     return result;
+  }
+
+  /**
+   *
+   * @param {object} knowledge
+   * @param {string} knowledge.name
+   * @param {string[]} knowledge.synonyms
+   * @param {string} knowledge.definitiontype
+   * @param {string} knowledge.description
+   * @returns {Promise<CreateKnowledgeResult>}
+   */
+  static async CreateKnowledgeAsync(knowledge) {
+    if (
+      typeof knowledge.name !== "string" ||
+      typeof knowledge.definitiontype !== "string" ||
+      typeof knowledge.description !== "string" ||
+      !(knowledge.synonyms instanceof Array) ||
+      knowledge.synonyms.find((synonym) => typeof synonym !== "string")
+    ) {
+      return CreateKnowledgeResult.CreateForError("The provided object was malformed");
+    }
+
+    console.log("1");
+    const validDefinitionTypes = (await DialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
+    if (!validDefinitionTypes.includes(knowledge.definitiontype)) {
+      return CreateKnowledgeResult.CreateForError("Specified Definitiontype does not exist");
+    }
+
+    console.log("2");
+    const existingKnowledge = (await DialogFlowService.GetKeywordsAsync()).map((k) => k.value);
+    if (existingKnowledge.includes(knowledge.name)) {
+      return CreateKnowledgeResult.CreateForError("Knowledge already exists");
+    }
+
+    console.log("3");
+    const databaseObject = {
+      definitiontype: knowledge.definitiontype,
+      keyword: knowledge.name,
+      description: knowledge.description
+    };
+
+    console.log("4");
+    const dialogFlowObject = {
+      value: knowledge.name,
+      synonyms: knowledge.synonyms
+    };
+
+    console.log("5");
+    await Promise.all(
+      MasterDataRepository.InsertCollectionData("knowledge", databaseObject),
+      DialogFlowService.CreateKnowledge(dialogFlowObject)
+    );
+
+    console.log("6");
+    return CreateKnowledgeResult.CreateForSuccess();
   }
 }
 
