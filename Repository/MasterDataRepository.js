@@ -3,20 +3,6 @@ const { ObjectId } = require("mongodb");
 const { DialogFlowService } = require("../Services/DialogFlowService");
 class MasterDataRepository {
   static #allowedCollections = ["departments", "knowledge"];
-  static #collectionSchemes = [
-    {
-      collection: "departments",
-      fields: [{ key: "departmentName", name: "Abteilung", type: "text" }]
-    },
-    {
-      collection: "knowledge",
-      fields: [
-        { key: "name", name: "Titel", type: "text" },
-        { key: "keywords", name: "Synonyme (Kommasepariert)", type: "text" },
-        { key: "description", name: "Beschreibung", type: "text" }
-      ]
-    }
-  ];
   /**
    * Returns all documents contained in the specified collection
    * @param {string} collection The name of the collection to load
@@ -34,18 +20,27 @@ class MasterDataRepository {
    * @param {string} collection The name of the collection
    */
   static async GetCollectionScheme(collection) {
-    if (!this.#allowedCollections.includes(collection)) {
-      throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
+    switch (collection) {
+      case "departments":
+        return {
+          collection: "departments",
+          fields: [{ key: "departmentName", name: "Abteilung", type: "text" }]
+        };
+      case "knowledge":
+        const dialogFlowService = await DialogFlowService.getInstance();
+        const options = (await dialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
+        return {
+          collection: "knowledge",
+          fields: [
+            { key: "name", name: "Titel", type: "text" },
+            { key: "keywords", name: "Synonyme (Kommasepariert)", type: "text" },
+            { key: "definitiontype", name: "Definition", type: "options", options },
+            { key: "description", name: "Beschreibung", type: "text" }
+          ]
+        };
+      default:
+        throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
-
-    if (collection == "knowledge") {
-      const scheme = this.#collectionSchemes.find((x) => x.collection == collection);
-      const dialogFlowService = await DialogFlowService.getInstance();
-      const options = (await dialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
-      scheme.fields.push({ key: "definitiontype", name: "Definition", type: "options", options });
-      return scheme;
-    }
-    return this.#collectionSchemes.find((x) => x.collection == collection);
   }
 
   /**
