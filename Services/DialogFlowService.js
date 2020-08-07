@@ -138,13 +138,15 @@ class DialogFlowService {
   async deleteKnowledge(term) {
     const keywordPath = "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63";
     const url = `${DialogFlowService.#dialogFlowBaseUrl}/${keywordPath}/entities:batchDelete`;
-    this.#client.request({
-      url,
-      data: {
-        entities: [term]
-      },
-      method: "POST"
-    });
+    console.log(
+      await this.#client.request({
+        url,
+        data: {
+          entityValues: [term]
+        },
+        method: "POST"
+      })
+    );
   }
 }
 

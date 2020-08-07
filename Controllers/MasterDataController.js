@@ -11,6 +11,8 @@ class MasterDataController {
   static getRouter() {
     const router = Router();
     router.get("/data/departments", MasterDataController.GetDepartmentsAsync);
+    router.post("/data/departments", MasterDataController.CreateDepartmentAsync);
+    router.delete("/data/departments/:departmentId", MasterDataController.DeleteDepartmentAsync);
     router.get("/data/knowledge", MasterDataController.GetKnowledgeAsync);
     router.post("/data/knowledge", MasterDataController.CreateKnowledgeAsync);
     router.delete("/data/knowledge/:Term", MasterDataController.DeleteKnowledgeAsync);
@@ -29,8 +31,8 @@ class MasterDataController {
       return;
     }
 
-    const departments = await MasterDataRepository.GetAllData(req.params.collection);
-    res.json(departments.map((department) => department.departmentName));
+    const departments = await MasterDataRepository.GetAllData("departments");
+    res.json(departments);
   }
 
   /**
@@ -88,11 +90,12 @@ class MasterDataController {
       const result = await MasterDataBusiness.CreateKnowledgeAsync(req.body);
 
       if (result.error) {
-        res.status(400).send(result.code);
+        res.status(400).send(result);
+        console.log(chalk.yellow("Bad request while creating knowledge:\n", JSON.stringify(result)));
         return;
       }
 
-      res.status(204).send();
+      res.json(req.body);
     } catch (error) {
       res.status(500).send();
       console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
@@ -120,7 +123,60 @@ class MasterDataController {
       res.status(204).send();
     } catch (error) {
       res.status(500).send();
-      console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
+      console.log(chalk.red("Unexpected error occured while deleting knowledge:\n", error));
+    }
+  }
+
+  /**
+   * Deletes a department
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async DeleteDepartmentAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    try {
+      if (!req.params.departmentId) {
+        res.status(400).send();
+        return;
+      }
+
+      await MasterDataRepository.DeleteDataById("departments", req.params.departmentId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).send();
+      console.log(chalk.red("Unexpected error occured while deleting department:\n", error));
+    }
+  }
+
+  /**
+   * Creates a department
+   * @param {Request} req
+   * @param {Response} res
+   */
+  static async CreateDepartmentAsync(req, res) {
+    if (!req.userData.isAdmin) {
+      res.status(401).send();
+      return;
+    }
+
+    try {
+      if (typeof req.body.departmentName !== "string") {
+        res.status(400).send();
+        return;
+      }
+
+      const result = await MasterDataRepository.InsertCollectionData("departments", {
+        departmentName: req.body.departmentName
+      });
+      const response = { ...req.body, _id: result.insertedId };
+      res.send(response);
+    } catch (error) {
+      res.status(500).send();
+      console.log(chalk.red("Unexpected error occured while creating department:\n", error));
     }
   }
 }

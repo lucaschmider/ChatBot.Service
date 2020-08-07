@@ -10,7 +10,6 @@ class MasterDataBusiness {
 
     const result = knowledgebase.map((knownWord) => {
       const mappedKeyword = keywords.find((keyword) => keyword.value == knownWord.keyword);
-
       return {
         name: knownWord.keyword,
         keywords: [knownWord.keyword, ...mappedKeyword.synonyms],

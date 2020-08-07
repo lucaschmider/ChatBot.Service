@@ -1,5 +1,5 @@
-const { connection } = require("mongoose");
-
+const { connection, mongo } = require("mongoose");
+const { ObjectId } = require("mongodb");
 class MasterDataRepository {
   static #allowedCollections = ["departments", "knowledge"];
   static #collectionSchemes = [
@@ -26,23 +26,7 @@ class MasterDataRepository {
     if (!this.#allowedCollections.includes(collection)) {
       throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
-
-    switch (collection) {
-      case "departments":
-        return new Promise((resolve) =>
-          resolve([
-            { departmentName: "Human Resources", id: "0" },
-            { departmentName: "External Sales", id: "1" },
-            { departmentName: "IT-Department", id: "2" },
-            { departmentName: "Key Accounts", id: "3" },
-            { departmentName: "Manufacturing Radar", id: "4" },
-            { departmentName: "Manufacturing Capacitive", id: "5" }
-          ])
-        );
-
-      default:
-        return connection.db.collection(collection).find().toArray();
-    }
+    return connection.db.collection(collection).find().toArray();
   }
 
   /**
@@ -66,7 +50,7 @@ class MasterDataRepository {
       throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
 
-    return connection.db.collection(collection).insertOne(data);
+    return await connection.db.collection(collection).insertOne(data);
   }
 
   /**
@@ -78,8 +62,19 @@ class MasterDataRepository {
     if (!this.#allowedCollections.includes(collection)) {
       throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
     }
-
     return connection.db.collection(collection).deleteMany(criteria);
+  }
+
+  /**
+   * Deletes the specified docId
+   * @param {string} collection
+   * @param {string} docId
+   */
+  static async DeleteDataById(collection, docId) {
+    if (!this.#allowedCollections.includes(collection)) {
+      throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
+    }
+    return connection.db.collection(collection).deleteOne({ _id: ObjectId(docId) });
   }
 }
 
