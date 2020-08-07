@@ -49,11 +49,6 @@ class MasterDataBusiness {
       );
     }
 
-    const existingKnowledge = (await dialogFlowService.GetKeywordsAsync()).map((k) => k.value);
-    if (existingKnowledge.includes(knowledge.name)) {
-      return CreateKnowledgeResult.CreateForError("Knowledge already exists", "validation/already-exists");
-    }
-
     const databaseObject = {
       definitionType: knowledge.definitiontype,
       keyword: knowledge.name,
