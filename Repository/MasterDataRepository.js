@@ -1,19 +1,19 @@
-const { connection, mongo } = require("mongoose");
+const { connection } = require("mongoose");
 const { ObjectId } = require("mongodb");
+const { DialogFlowService } = require("../Services/DialogFlowService");
 class MasterDataRepository {
   static #allowedCollections = ["departments", "knowledge"];
   static #collectionSchemes = [
     {
       collection: "departments",
-      fields: [{ key: "departmentName", name: "Abteilung" }]
+      fields: [{ key: "departmentName", name: "Abteilung", type: "text" }]
     },
     {
       collection: "knowledge",
       fields: [
-        { key: "name", name: "Titel" },
-        { key: "keywords", name: "Synonyme (Kommasepariert)" },
-        { key: "definitiontype", name: "Definition" },
-        { key: "description", name: "Beschreibung" }
+        { key: "name", name: "Titel", type: "text" },
+        { key: "keywords", name: "Synonyme (Kommasepariert)", type: "text" },
+        { key: "description", name: "Beschreibung", type: "text" }
       ]
     }
   ];
@@ -36,6 +36,14 @@ class MasterDataRepository {
   static async GetCollectionScheme(collection) {
     if (!this.#allowedCollections.includes(collection)) {
       throw new Error(`Collection '${collection}' is not meant to be used with the MasterDataRepository.`);
+    }
+
+    if (collection == "knowledge") {
+      const scheme = this.#collectionSchemes.find((x) => x.collection == collection);
+      const dialogFlowService = await DialogFlowService.getInstance();
+      const options = (await dialogFlowService.GetDefinitionTypesAsync()).map((type) => type.value);
+      scheme.fields.push({ key: "definitiontype", name: "Definition", type: "options", options });
+      return scheme;
     }
     return this.#collectionSchemes.find((x) => x.collection == collection);
   }

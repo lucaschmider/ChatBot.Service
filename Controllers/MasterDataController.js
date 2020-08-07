@@ -95,7 +95,13 @@ class MasterDataController {
         return;
       }
 
-      res.json(req.body);
+      const createdData = {
+        name: req.body.name,
+        keywords: [req.body.name, ...req.body.synonyms],
+        definitiontype: req.body.definitiontype,
+        description: req.body.description
+      };
+      res.json(createdData);
     } catch (error) {
       res.status(500).send();
       console.log(chalk.red("Unexpected error occured while creating knowledge:\n", error));
