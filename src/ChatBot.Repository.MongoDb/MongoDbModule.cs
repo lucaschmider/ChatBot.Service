@@ -7,7 +7,8 @@ namespace ChatBot.Repository.MongoDb
     public static class MongoDbModule
 
     {
-        public static IServiceCollection AddMongoDbModule(this IServiceCollection services, MongoDbConfiguration configuration)
+        public static IServiceCollection AddMongoDbModule(this IServiceCollection services,
+            MongoDbConfiguration configuration)
         {
             services.AddSingleton(configuration);
             services.AddSingleton<IUserRepository, UserRepository>();

@@ -13,9 +13,9 @@ namespace ChatBot.Repository.MongoDb
     public class UserRepository : IUserRepository
     {
         private const string CollectionName = "users";
+        private readonly IMongoCollection<UserDetails> _collection;
 
         private readonly ILogger<UserRepository> _logger;
-        private readonly IMongoCollection<UserDetails> _collection;
 
         public UserRepository(ILogger<UserRepository> logger, MongoDbConfiguration configuration)
         {
@@ -37,7 +37,6 @@ namespace ChatBot.Repository.MongoDb
                 .FindAsync(u => u.Uid == userId)
                 .ConfigureAwait(false);
             return user.FirstOrDefault();
-
         }
     }
 }

@@ -1,3 +1,4 @@
+using ChatBot.Business;
 using ChatBot.Repository.MongoDb;
 using ChatBot.Repository.MongoDb.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +24,7 @@ namespace ChatBot.Service
         public void ConfigureServices(IServiceCollection services)
         {
             var mongoConfiguration = new MongoDbConfiguration();
-                Configuration.GetSection(MongoDbConfiguration.SectionKey).Bind(mongoConfiguration);
+            Configuration.GetSection(MongoDbConfiguration.SectionKey).Bind(mongoConfiguration);
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -42,6 +43,7 @@ namespace ChatBot.Service
                 });
             services
                 .AddMongoDbModule(mongoConfiguration)
+                .AddChatBotBusinessModule()
                 .AddControllers();
         }
 

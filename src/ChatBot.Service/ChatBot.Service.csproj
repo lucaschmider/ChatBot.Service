@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChatBot.Business\ChatBot.Business.csproj" />
     <ProjectReference Include="..\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj" />
   </ItemGroup>
 
