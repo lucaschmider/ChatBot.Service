@@ -8,5 +8,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj" />
+  </ItemGroup>
+
 
 </Project>

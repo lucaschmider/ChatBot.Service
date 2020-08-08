@@ -1,3 +1,4 @@
+using ChatBot.Repository.MongoDb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +36,9 @@ namespace ChatBot.Service
                         ValidateLifetime = true
                     };
                 });
-            services.AddControllers();
+            services
+                .AddMongoDbModule()
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
