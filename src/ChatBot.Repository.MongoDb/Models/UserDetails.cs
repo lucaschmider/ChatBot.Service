@@ -1,11 +1,9 @@
-﻿using ChatBot.Repository.Contracts.Models;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace ChatBot.Repository.MongoDb.Models
 {
-    /// <inheritdoc cref="IUserDetails" />
     [BsonIgnoreExtraElements]
-    public class UserDetails : IUserDetails
+    public class InternalUser
     {
         [BsonElement("uid")] public string Uid { get; set; }
 

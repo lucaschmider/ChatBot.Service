@@ -3,31 +3,31 @@
     /// <summary>
     ///     Represents a single users details
     /// </summary>
-    public interface IUserDetails
+    public class User
     {
         /// <summary>
         ///     The id of the user described
         /// </summary>
-        string Uid { get; }
+        public string Uid { get; set; }
 
         /// <summary>
         ///     Indicates whether the user has administrative access
         /// </summary>
-        bool IsAdmin { get; }
+        public bool IsAdmin { get; set; }
 
         /// <summary>
         ///     The fullname of the user
         /// </summary>
-        string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     The department of the user
         /// </summary>
-        string Department { get; }
+        public string Department { get; set; }
 
         /// <summary>
         ///     The email of the user
         /// </summary>
-        string Email { get; }
+        public string Email { get; set; }
     }
 }

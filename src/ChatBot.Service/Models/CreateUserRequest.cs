@@ -1,4 +1,4 @@
-﻿namespace ChatBot.Business.Contracts.User.Models
+﻿namespace ChatBot.Service.Models
 {
     /// <summary>
     ///     Represents the request used to create user

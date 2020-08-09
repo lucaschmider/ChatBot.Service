@@ -1,13 +1,13 @@
+using ChatBot.AuthProvider.Firebase;
+using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
 using ChatBot.Repository.MongoDb;
 using ChatBot.Repository.MongoDb.Configurations;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ChatBot.Service
 {
@@ -26,22 +26,11 @@ namespace ChatBot.Service
             var mongoConfiguration = new MongoDbConfiguration();
             Configuration.GetSection(MongoDbConfiguration.SectionKey).Bind(mongoConfiguration);
 
+            var firebaseConfiguration = new FirebaseAuthConfiguration();
+            Configuration.GetSection(FirebaseAuthConfiguration.SectionKey).Bind(firebaseConfiguration);
+
             services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    var projectId = Configuration.GetValue<string>("Authentication:FirebaseProjectId");
-                    options.Authority = "https://securetoken.google.com/" + projectId;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = "https://securetoken.google.com/" + projectId,
-                        ValidateAudience = true,
-                        ValidAudience = projectId,
-                        ValidateLifetime = true
-                    };
-                });
-            services
+                .AddFirebaseAuthModule(firebaseConfiguration)
                 .AddMongoDbModule(mongoConfiguration)
                 .AddChatBotBusinessModule()
                 .AddControllers();

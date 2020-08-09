@@ -13,7 +13,7 @@ namespace ChatBot.Repository.MongoDb
     public class UserRepository : IUserRepository
     {
         private const string CollectionName = "users";
-        private readonly IMongoCollection<UserDetails> _collection;
+        private readonly IMongoCollection<InternalUser> _collection;
 
         private readonly ILogger<UserRepository> _logger;
 
@@ -26,17 +26,26 @@ namespace ChatBot.Repository.MongoDb
             var database = client.GetDatabase(configuration.Database);
 
             _logger = logger;
-            _collection = database.GetCollection<UserDetails>(CollectionName);
+            _collection = database.GetCollection<InternalUser>(CollectionName);
         }
 
         /// <inheritdoc />
-        public async Task<IUserDetails> GetUserDetailsAsync(string userId)
+        public async Task<User> GetUserDetailsAsync(string userId)
         {
             _logger.LogInformation($"Loading data for user with id {userId}.");
             var user = await _collection
                 .FindAsync(u => u.Uid == userId)
                 .ConfigureAwait(false);
-            return user.FirstOrDefault();
+            return user
+                .FirstOrDefault()
+                .Map();
+        }
+
+        /// <inheritdoc />
+        public async Task CreateUserAsync(User details)
+        {
+            _logger.LogInformation($"Writing details for user {details.Uid}");
+            await _collection.InsertOneAsync(details.Map());
         }
     }
 }

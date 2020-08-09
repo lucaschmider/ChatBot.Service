@@ -13,6 +13,13 @@ namespace ChatBot.Repository.Contracts
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IUserDetails> GetUserDetailsAsync(string userId);
+        Task<User> GetUserDetailsAsync(string userId);
+
+        /// <summary>
+        ///     Writes user details to the database
+        /// </summary>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        Task CreateUserAsync(User details);
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatBot.AuthProvider.Contract.Exceptions;
 using ChatBot.Business.Contracts.User;
-using ChatBot.Business.Contracts.User.Models;
+using ChatBot.Business.Contracts.User.Exceptions;
 using ChatBot.Repository.Contracts;
 using ChatBot.Service.Mappers;
 using ChatBot.Service.Models;
@@ -50,7 +51,7 @@ namespace ChatBot.Service.Controllers
             try
             {
                 _logger.LogInformation("Getting user details");
-                var userId = User.Claims.FirstOrDefault(claim => claim.Type == "user_id")?.Value;
+                var userId = GetCurrentUserId();
 
                 if (userId == null)
                 {
@@ -90,17 +91,47 @@ namespace ChatBot.Service.Controllers
             {
                 _logger.LogInformation("Trying to create a new user.");
 
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness.CheckAdminPrivilegesAsync(currentUserId);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    return Unauthorized();
+                }
+
                 var newUserModel = await _userBusiness
                     .CreateUserAsync(user.Map())
                     .ConfigureAwait(false);
 
                 return Ok(newUserModel.Map());
             }
+            catch (InvalidUserDataException ex)
+            {
+                _logger.LogWarning(ex, "The specified object contained errors", user);
+                return BadRequest();
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                _logger.LogWarning("The user that was tried to create already exists", ex);
+                return BadRequest();
+            }
             catch (Exception ex)
             {
                 _logger.LogError("An unexpected error occured while creating a new user.", ex);
                 return StatusCode(500);
             }
+        }
+
+        /// <summary>
+        ///     Returns the id of the current user id
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserId()
+        {
+            var userId = User.Claims.FirstOrDefault(claim => claim.Type == "user_id")?.Value;
+            userId.ShouldNotBeNullOrWhiteSpace();
+            return userId;
         }
     }
 }

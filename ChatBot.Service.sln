@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Business.Contracts"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Business", "src\ChatBot.Business\ChatBot.Business.csproj", "{3765A464-0E7F-442B-8B5F-235DCCF09FA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AuthProvider.Contract", "src\ChatBot.AuthProvider.Contract\ChatBot.AuthProvider.Contract.csproj", "{F1F617D5-4480-4894-93C8-1ED37AF89C18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AuthProvider.Firebase", "src\ChatBot.AuthProvider.Firebase\ChatBot.AuthProvider.Firebase.csproj", "{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +87,30 @@ Global
 		{3765A464-0E7F-442B-8B5F-235DCCF09FA5}.Release|x64.Build.0 = Release|Any CPU
 		{3765A464-0E7F-442B-8B5F-235DCCF09FA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{3765A464-0E7F-442B-8B5F-235DCCF09FA5}.Release|x86.Build.0 = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|x64.Build.0 = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Debug|x86.Build.0 = Debug|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|x64.ActiveCfg = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|x64.Build.0 = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1F617D5-4480-4894-93C8-1ED37AF89C18}.Release|x86.Build.0 = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|x64.Build.0 = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
