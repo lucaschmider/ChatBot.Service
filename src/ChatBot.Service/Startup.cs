@@ -1,3 +1,4 @@
+using System.Linq;
 using ChatBot.AuthProvider.Firebase;
 using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
@@ -30,6 +31,7 @@ namespace ChatBot.Service
             Configuration.GetSection(FirebaseAuthConfiguration.SectionKey).Bind(firebaseConfiguration);
 
             services
+                .AddCors()
                 .AddFirebaseAuthModule(firebaseConfiguration)
                 .AddMongoDbModule(mongoConfiguration)
                 .AddChatBotBusinessModule()
@@ -39,8 +41,14 @@ namespace ChatBot.Service
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            var hosts = Configuration
+                .GetSection("AllowedHosts")
+                .GetChildren()
+                .Select(child => child.Value)
+                .ToArray();
 
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            app.UseCors(options => options.WithOrigins(hosts).AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
 
             app.UseRouting();

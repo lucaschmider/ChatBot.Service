@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +42,7 @@ namespace ChatBot.Service.Controllers
         ///     Returns details about the user that is currently signed in
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/details")]
+        [HttpGet("details")]
         [Authorize]
         [ProducesResponseType(typeof(UserDetails), 200)]
         [ProducesResponseType(400)]
@@ -154,11 +154,11 @@ namespace ChatBot.Service.Controllers
                     return Unauthorized();
                 }
 
-                var userData = await _userRepository
-                    .GetAllUsersAsync()
+                await _userBusiness
+                    .DeleteUserAsync(userId)
                     .ConfigureAwait(false);
 
-                return Ok(userData);
+                return NoContent();
             }
             catch (ShouldAssertException)
             {
