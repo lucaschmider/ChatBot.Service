@@ -10,8 +10,8 @@ namespace ChatBot.Business
 {
     public class ChatBusiness : IChatBusiness
     {
-        private readonly IMessageInterpreter _messageInterpreter;
         private readonly IChatRepository _chatRepository;
+        private readonly IMessageInterpreter _messageInterpreter;
 
         public ChatBusiness(IMessageInterpreter messageInterpreter, IChatRepository chatRepository)
         {
@@ -28,18 +28,27 @@ namespace ChatBot.Business
                 .InterpretMessageAsync(message, userId)
                 .ConfigureAwait(false);
 
+            var explanation = string.Empty;
             if (messageInterpretation.IsCompleted)
             {
-                return;
+                explanation = await GetExplanationAsync(
+                        messageInterpretation.Parameters["definitiontype"],
+                        messageInterpretation.Parameters["keyword"])
+                    .ConfigureAwait(false);
             }
 
             await _chatRepository.SendMessageAsync(new ChatMessage
             {
-                ConversationFinished = false,
+                ConversationFinished = messageInterpretation.IsCompleted,
                 CreateDate = DateTime.Now,
-                Message = messageInterpretation.AnswerString,
+                Message = messageInterpretation.IsCompleted ? explanation : messageInterpretation.AnswerString,
                 Recipient = userId
             }).ConfigureAwait(false);
+        }
+
+        private async Task<string> GetExplanationAsync(string definitionType, string keyword)
+        {
+            return await Task.FromResult($"Ok, ein {keyword} nach {definitionType} ist [...].");
         }
     }
 }
