@@ -1,11 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Shouldly" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChatBot.AuthProvider.Firebase\ChatBot.AuthProvider.Firebase.csproj" />
+    <ProjectReference Include="..\ChatBot.Business\ChatBot.Business.csproj" />
+    <ProjectReference Include="..\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj" />
   </ItemGroup>
 
 
