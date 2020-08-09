@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.AuthProvider.Contract.Exceptions;
@@ -41,7 +42,7 @@ namespace ChatBot.Service.Controllers
         ///     Returns details about the user that is currently signed in
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("/details")]
         [Authorize]
         [ProducesResponseType(typeof(UserDetails), 200)]
         [ProducesResponseType(400)]
@@ -92,7 +93,9 @@ namespace ChatBot.Service.Controllers
                 _logger.LogInformation("Trying to create a new user.");
 
                 var currentUserId = GetCurrentUserId();
-                var isRequestingUserAdmin = await _userBusiness.CheckAdminPrivilegesAsync(currentUserId);
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
 
                 if (!isRequestingUserAdmin)
                 {
@@ -141,7 +144,9 @@ namespace ChatBot.Service.Controllers
                 _logger.LogInformation("Trying to delete user");
 
                 var currentUserId = GetCurrentUserId();
-                var isRequestingUserAdmin = await _userBusiness.CheckAdminPrivilegesAsync(currentUserId);
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
 
                 if (!isRequestingUserAdmin)
                 {
@@ -149,8 +154,11 @@ namespace ChatBot.Service.Controllers
                     return Unauthorized();
                 }
 
-                await _userBusiness.DeleteUserAsync(userId);
-                return NoContent();
+                var userData = await _userRepository
+                    .GetAllUsersAsync()
+                    .ConfigureAwait(false);
+
+                return Ok(userData);
             }
             catch (ShouldAssertException)
             {
@@ -160,6 +168,45 @@ namespace ChatBot.Service.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex,"Unexpected error occured while deleting a user", userId);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        ///     Returns a list of all registered users
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(typeof(IEnumerable<UserDetails>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAllUsersAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Trying to get all users data");
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    return Unauthorized();
+                }
+
+                var allUsers = await _userRepository
+                    .GetAllUsersAsync()
+                    .ConfigureAwait(false);
+
+                return Ok(allUsers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error occured while getting all users");
                 return StatusCode(500);
             }
         }

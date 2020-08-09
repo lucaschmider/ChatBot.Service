@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Repository.MongoDb.Configurations;
@@ -39,6 +41,16 @@ namespace ChatBot.Repository.MongoDb
             return user
                 .FirstOrDefault()
                 .Map();
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            _logger.LogInformation($"Loading all users data.");
+            var user = await _collection
+                .FindAsync(u => true)
+                .ConfigureAwait(false);
+            return user.ToList().Select(u => u.Map());
         }
 
         /// <inheritdoc />

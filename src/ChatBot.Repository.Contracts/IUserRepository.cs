@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChatBot.Repository.Contracts.Models;
 
 namespace ChatBot.Repository.Contracts
@@ -14,6 +15,12 @@ namespace ChatBot.Repository.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<User> GetUserDetailsAsync(string userId);
+
+        /// <summary>
+        ///     Returns a list of all registered user meta data
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<User>> GetAllUsersAsync();
 
         /// <summary>
         ///     Writes user details to the database
