@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ChatBot.AuthProvider.Firebase\ChatBot.AuthProvider.Firebase.csproj" />
     <ProjectReference Include="..\ChatBot.Business\ChatBot.Business.csproj" />
+    <ProjectReference Include="..\ChatBot.MessageInterpreter.DialogFlow\ChatBot.MessageInterpreter.DialogFlow.csproj" />
     <ProjectReference Include="..\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj" />
   </ItemGroup>
 

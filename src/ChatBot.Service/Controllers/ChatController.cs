@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatBot.Business.Contracts.Chat;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Mappers;
@@ -22,14 +23,17 @@ namespace ChatBot.Service.Controllers
     {
         private readonly IChatRepository _chatRepository;
         private readonly ILogger<ChatController> _logger;
+        private readonly IChatBusiness _chatBusiness;
 
-        public ChatController(IChatRepository chatRepository, ILogger<ChatController> logger)
+        public ChatController(IChatRepository chatRepository, ILogger<ChatController> logger, IChatBusiness chatBusiness)
         {
             chatRepository.ShouldNotBeNull();
             logger.ShouldNotBeNull();
+            chatBusiness.ShouldNotBeNull();
 
             _chatRepository = chatRepository;
             _logger = logger;
+            _chatBusiness = chatBusiness;
         }
 
         /// <summary>
@@ -70,17 +74,13 @@ namespace ChatBot.Service.Controllers
         {
             try
             {
-                await _chatRepository.SendMessageAsync(new ChatMessage
-                {
-                    CreateDate = DateTime.Now,
-                    ConversationFinished = true,
-                    Message = message.Message,
-                    Recipient = GetCurrentUserId()
-                });
+                await _chatBusiness.HandleMessageAsync(message.Message, GetCurrentUserId())
+                    .ConfigureAwait(false);
                 return NoContent();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Unexpected error occured while creating new message");
                 return StatusCode(500);
             }
         }
