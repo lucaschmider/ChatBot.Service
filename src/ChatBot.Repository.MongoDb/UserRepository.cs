@@ -12,30 +12,23 @@ using Shouldly;
 namespace ChatBot.Repository.MongoDb
 {
     /// <inheritdoc />
-    public class UserRepository : IUserRepository
+    public class UserRepository : RepositoryBase<InternalUser>, IUserRepository
     {
-        private const string CollectionName = "users";
-        private readonly IMongoCollection<InternalUser> _collection;
-
         private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(ILogger<UserRepository> logger, MongoDbConfiguration configuration)
+        public UserRepository(ILogger<UserRepository> logger, MongoDbConfiguration configuration): base(configuration)
         {
             logger.ShouldNotBeNull();
             configuration.ShouldNotBeNull();
-
-            var client = new MongoClient(configuration.ConnectionString);
-            var database = client.GetDatabase(configuration.Database);
-
+            
             _logger = logger;
-            _collection = database.GetCollection<InternalUser>(CollectionName);
         }
 
         /// <inheritdoc />
         public async Task<User> GetUserDetailsAsync(string userId)
         {
             _logger.LogInformation($"Loading data for user with id {userId}.");
-            var user = await _collection
+            var user = await Collection
                 .FindAsync(u => u.Uid == userId)
                 .ConfigureAwait(false);
             return user
@@ -47,7 +40,7 @@ namespace ChatBot.Repository.MongoDb
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             _logger.LogInformation($"Loading all users data.");
-            var user = await _collection
+            var user = await Collection
                 .FindAsync(u => true)
                 .ConfigureAwait(false);
             return user.ToList().Select(u => u.Map());
@@ -57,7 +50,7 @@ namespace ChatBot.Repository.MongoDb
         public async Task CreateUserDetailsAsync(User details)
         {
             _logger.LogInformation($"Writing details for user {details.Uid}");
-            await _collection
+            await Collection
                 .InsertOneAsync(details.Map())
                 .ConfigureAwait(false);
         }
@@ -66,7 +59,7 @@ namespace ChatBot.Repository.MongoDb
         public async Task DeleteUserDetailsAsync(string userId)
         {
             _logger.LogInformation($"Removing data of user {userId}");
-            await _collection
+            await Collection
                 .DeleteOneAsync(user => user.Uid == userId)
                 .ConfigureAwait(false);
         }

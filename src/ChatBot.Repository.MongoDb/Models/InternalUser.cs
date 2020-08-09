@@ -3,6 +3,7 @@
 namespace ChatBot.Repository.MongoDb.Models
 {
     [BsonIgnoreExtraElements]
+    [CollectionName("users")]
     public class InternalUser
     {
         [BsonElement("uid")] public string Uid { get; set; }
