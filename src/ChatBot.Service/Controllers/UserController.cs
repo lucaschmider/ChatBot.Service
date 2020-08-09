@@ -123,6 +123,47 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+
+        /// <summary>
+        ///     Deletes the user specified in the route
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpDelete("{userId}")]
+        [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
+        {
+            try
+            {
+                _logger.LogInformation("Trying to delete user");
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness.CheckAdminPrivilegesAsync(currentUserId);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    return Unauthorized();
+                }
+
+                await _userBusiness.DeleteUserAsync(userId);
+                return NoContent();
+            }
+            catch (ShouldAssertException)
+            {
+                _logger.LogInformation("No userId was specified");
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Unexpected error occured while deleting a user", userId);
+                return StatusCode(500);
+            }
+        }
+
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>

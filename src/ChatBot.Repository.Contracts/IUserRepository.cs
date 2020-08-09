@@ -20,6 +20,13 @@ namespace ChatBot.Repository.Contracts
         /// </summary>
         /// <param name="details"></param>
         /// <returns></returns>
-        Task CreateUserAsync(User details);
+        Task CreateUserDetailsAsync(User details);
+
+        /// <summary>
+        ///     Deletes the associated meta information
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task DeleteUserDetailsAsync(string userId);
     }
 }

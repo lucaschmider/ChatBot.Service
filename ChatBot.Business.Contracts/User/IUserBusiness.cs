@@ -18,5 +18,12 @@ namespace ChatBot.Business.Contracts.User
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<bool> CheckAdminPrivilegesAsync(string userId);
+
+        /// <summary>
+        ///     Removes the user from the registry as well as all meta information assigned to it
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task DeleteUserAsync(string userId);
     }
 }

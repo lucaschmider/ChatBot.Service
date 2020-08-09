@@ -42,10 +42,21 @@ namespace ChatBot.Repository.MongoDb
         }
 
         /// <inheritdoc />
-        public async Task CreateUserAsync(User details)
+        public async Task CreateUserDetailsAsync(User details)
         {
             _logger.LogInformation($"Writing details for user {details.Uid}");
-            await _collection.InsertOneAsync(details.Map());
+            await _collection
+                .InsertOneAsync(details.Map())
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task DeleteUserDetailsAsync(string userId)
+        {
+            _logger.LogInformation($"Removing data of user {userId}");
+            await _collection
+                .DeleteOneAsync(user => user.Uid == userId)
+                .ConfigureAwait(false);
         }
     }
 }

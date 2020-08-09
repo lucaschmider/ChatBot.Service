@@ -38,7 +38,7 @@ namespace ChatBot.Business
                 var user = createUserRequest.Map();
                 user.Uid = userId;
 
-                await _userRepository.CreateUserAsync(user);
+                await _userRepository.CreateUserDetailsAsync(user);
                 return user.Map();
             }
             catch (ShouldAssertException e)
@@ -55,6 +55,15 @@ namespace ChatBot.Business
                 .ConfigureAwait(false);
 
             return user.IsAdmin;
+        }
+
+        public Task DeleteUserAsync(string userId)
+        {
+            userId.ShouldNotBeNullOrWhiteSpace();
+
+            return Task.WhenAll(
+                _authProvider.DeleteUserAsync(userId),
+                _userRepository.DeleteUserDetailsAsync(userId));
         }
     }
 }
