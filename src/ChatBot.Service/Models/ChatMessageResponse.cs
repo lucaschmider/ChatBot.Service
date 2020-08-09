@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace ChatBot.Repository.Contracts.Models
+namespace ChatBot.Service.Models
 {
     /// <summary>
     ///     Represents a text message
     /// </summary>
-    public class ChatMessage
+    public class ChatMessageResponse
     {
         /// <summary>
         ///     The id of the user the message is sent to

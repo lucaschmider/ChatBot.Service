@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChatBot.Repository.Contracts;
@@ -12,7 +13,7 @@ using Shouldly;
 
 namespace ChatBot.Repository.MongoDb
 {
-    public class ChatRepository : RepositoryBase<InternalUser>, IChatRepository
+    public class ChatRepository : RepositoryBase<InternalMessage>, IChatRepository
     {
 
         private readonly ILogger<ChatRepository> _logger;
@@ -26,14 +27,21 @@ namespace ChatBot.Repository.MongoDb
             _logger = logger;
         }
 
-        public Task SendMessageAsync(ChatMessage message)
+        public async Task SendMessageAsync(ChatMessage message)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Creating new message");
+            await Collection.InsertOneAsync(message.Map());
         }
 
-        public Task<IEnumerable<ChatMessage>> GetChatMessagesForUserAsync(string userId)
+        public async Task<IEnumerable<ChatMessage>> GetChatMessagesForUserAndDeleteAsync(string userId)
         {
-            throw new NotImplementedException();
+            var now = DateTime.Now;
+            _logger.LogInformation($"Getting messages new messages for user {userId}");
+            var messages = await Collection
+                .FindAsync(message => message.CreateDate <= now && message.Recipient.Equals(userId))
+                .ConfigureAwait(false);
+            await Collection.DeleteManyAsync(message => message.CreateDate <= now);
+            return messages.ToList().Select(message => message.Map());
         }
     }
 }

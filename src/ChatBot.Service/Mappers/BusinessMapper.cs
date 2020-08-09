@@ -1,5 +1,7 @@
 ﻿using ChatBot.Business.Contracts.User.Models;
+using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Models;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ChatBot.Service.Mappers
 {
@@ -26,6 +28,17 @@ namespace ChatBot.Service.Mappers
                 Department = user.Department,
                 Name = user.Name,
                 Uid = user.Uid
+            };
+        }
+
+        public static ChatMessageResponse Map(this ChatMessage message)
+        {
+            return new ChatMessageResponse
+            {
+                CreateDate = message.CreateDate,
+                ConversationFinished = message.ConversationFinished,
+                Message = message.Message,
+                Recipient = message.Recipient
             };
         }
     }

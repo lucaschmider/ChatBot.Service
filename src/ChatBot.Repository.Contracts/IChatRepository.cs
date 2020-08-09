@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChatBot.Repository.Contracts.Models;
 
@@ -15,6 +13,6 @@ namespace ChatBot.Repository.Contracts
         /// <returns></returns>
         Task SendMessageAsync(ChatMessage message);
 
-        Task<IEnumerable<ChatMessage>> GetChatMessagesForUserAsync(string userId);
+        Task<IEnumerable<ChatMessage>> GetChatMessagesForUserAndDeleteAsync(string userId);
     }
 }

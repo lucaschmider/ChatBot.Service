@@ -6,14 +6,18 @@ namespace ChatBot.Repository.MongoDb.Models
     [CollectionName("users")]
     public class InternalUser
     {
-        [BsonElement("uid")] public string Uid { get; set; }
+        [BsonRequired] [BsonElement("uid")] public string Uid { get; set; }
 
-        [BsonElement("isAdmin")] public bool IsAdmin { get; set; }
+        [BsonRequired]
+        [BsonElement("isAdmin")]
+        public bool IsAdmin { get; set; }
 
-        [BsonElement("name")] public string Name { get; set; }
+        [BsonRequired] [BsonElement("name")] public string Name { get; set; }
 
-        [BsonElement("department")] public string Department { get; set; }
+        [BsonRequired]
+        [BsonElement("department")]
+        public string Department { get; set; }
 
-        [BsonElement("email")] public string Email { get; set; }
+        [BsonRequired] [BsonElement("email")] public string Email { get; set; }
     }
 }
