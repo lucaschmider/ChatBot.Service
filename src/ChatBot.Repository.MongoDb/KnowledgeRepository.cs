@@ -21,6 +21,7 @@ namespace ChatBot.Repository.MongoDb
 
         public async Task<string> GetDefinitionAsync(string definitionType, string keyword)
         {
+            _logger.LogInformation($"Loading definition for {keyword}");
             var definitionCursor = await Collection.FindAsync(knowledge =>
                 knowledge.DefinitionType == definitionType && knowledge.Keyword == keyword);
             return definitionCursor.FirstOrDefault()?.Description;

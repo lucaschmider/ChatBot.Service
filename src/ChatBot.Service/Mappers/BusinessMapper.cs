@@ -1,4 +1,5 @@
-﻿using ChatBot.Business.Contracts.User.Models;
+﻿using ChatBot.Business.Contracts.MasterData.Models;
+using ChatBot.Business.Contracts.User.Models;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Models;
 
@@ -38,6 +39,15 @@ namespace ChatBot.Service.Mappers
                 ConversationFinished = message.ConversationFinished,
                 Message = message.Message,
                 Recipient = message.Recipient
+            };
+        }
+
+        public static DepartmentResponse Map(this DepartmentModel department)
+        {
+            return new DepartmentResponse
+            {
+                DepartmentName = department.DepartmentName,
+                DepartmentId = department.DepartmentId
             };
         }
     }
