@@ -1,10 +1,12 @@
 using System.Linq;
+using System.Threading;
 using ChatBot.AuthProvider.Firebase;
 using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
 using ChatBot.MessageInterpreter.DialogFlow;
 using ChatBot.Repository.MongoDb;
 using ChatBot.Repository.MongoDb.Configurations;
+using ChatBot.StatisticsProvider.Influx;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,11 +36,15 @@ namespace ChatBot.Service
             var dialogFlowConfiguration = new DialogFlowConfiguration();
             Configuration.GetSection(DialogFlowConfiguration.SectionKey).Bind(dialogFlowConfiguration);
 
+            var influxConfiguration = new InfluxDbConfiguration();
+            Configuration.GetSection(InfluxDbConfiguration.SectionKey).Bind(influxConfiguration);
+
             services
                 .AddCors()
                 .AddFirebaseAuthModule(firebaseConfiguration)
                 .AddMongoDbModule(mongoConfiguration)
                 .AddDialogFlowModule(dialogFlowConfiguration)
+                .AddInfluxStatisticsModule(influxConfiguration)
                 .AddChatBotBusinessModule()
                 .AddControllers();
         }

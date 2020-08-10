@@ -14,6 +14,7 @@
     <ProjectReference Include="..\ChatBot.AuthProvider.Contract\ChatBot.AuthProvider.Contract.csproj" />
     <ProjectReference Include="..\ChatBot.MessageInterpreter.Contract\ChatBot.MessageInterpreter.Contract.csproj" />
     <ProjectReference Include="..\ChatBot.Repository.Contracts\ChatBot.Repository.Contracts.csproj" />
+    <ProjectReference Include="..\ChatBot.StatisticsProvider.Contract\ChatBot.StatisticsProvider.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
