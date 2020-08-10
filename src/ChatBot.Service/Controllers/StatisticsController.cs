@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.Business.Contracts.Statistics;
+using ChatBot.Service.Mappers;
 using ChatBot.Service.Models;
+using ChatBot.StatisticsProvider.Contract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shouldly;
@@ -16,16 +16,20 @@ namespace ChatBot.Service.Controllers
     [ApiController]
     public class StatisticsController : ControllerBase
     {
-        private readonly IStatisticsBusiness _statisticsBusiness;
         private readonly ILogger<StatisticsController> _logger;
+        private readonly IStatisticsBusiness _statisticsBusiness;
+        private readonly IStatisticsProvider _statisticsProvider;
 
-        public StatisticsController(IStatisticsBusiness statisticsBusiness, ILogger<StatisticsController> logger)
+        public StatisticsController(IStatisticsBusiness statisticsBusiness, ILogger<StatisticsController> logger,
+            IStatisticsProvider statisticsProvider)
         {
             statisticsBusiness.ShouldNotBeNull();
             logger.ShouldNotBeNull();
+            statisticsProvider.ShouldNotBeNull();
 
             _statisticsBusiness = statisticsBusiness;
             _logger = logger;
+            _statisticsProvider = statisticsProvider;
         }
 
         /// <summary>
@@ -52,6 +56,27 @@ namespace ChatBot.Service.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected Error occured while posting user feedback.");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        ///     Loads user satisfaction 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserSatisfactionAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Loading all available user feedback");
+                var statisticsData = await _statisticsProvider.GetFeedbackAsync();
+                return Ok(statisticsData.Select(report => report.Map()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected Error occured while loading user feedback.");
                 return StatusCode(500);
             }
         }
