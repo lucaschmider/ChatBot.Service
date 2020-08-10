@@ -40,7 +40,6 @@ namespace ChatBot.AuthProvider.Firebase
             {
                 throw new UserAlreadyExistsException();
             }
-            
         }
 
         public async Task DeleteUserAsync(string userId)

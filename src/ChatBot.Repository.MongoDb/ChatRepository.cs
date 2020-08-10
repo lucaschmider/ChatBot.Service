@@ -14,12 +14,11 @@ namespace ChatBot.Repository.MongoDb
 {
     public class ChatRepository : RepositoryBase<InternalMessage>, IChatRepository
     {
-
         private readonly ILogger<ChatRepository> _logger;
 
         public ChatRepository(
-            ILogger<ChatRepository> logger, 
-            MongoDbConfiguration configuration): base(configuration)
+            ILogger<ChatRepository> logger,
+            MongoDbConfiguration configuration) : base(configuration)
         {
             logger.ShouldNotBeNull();
             configuration.ShouldNotBeNull();

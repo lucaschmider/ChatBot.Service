@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.MessageInterpreter.Contract;
 using ChatBot.MessageInterpreter.Contract.Models;
@@ -50,12 +49,10 @@ namespace ChatBot.MessageInterpreter.DialogFlow
         private async Task EnsureSessionsClient()
         {
             if (_sessionsClient == null)
-            {
                 _sessionsClient = await new SessionsClientBuilder
                 {
                     JsonCredentials = _configuration.ServiceAccountJson
                 }.BuildAsync();
-            }
         }
     }
 }

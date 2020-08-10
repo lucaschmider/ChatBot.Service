@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.Business.Contracts.Chat;
 using ChatBot.Repository.Contracts;
-using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Mappers;
 using ChatBot.Service.Models;
-using DnsClient.Internal;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shouldly;
@@ -21,11 +17,12 @@ namespace ChatBot.Service.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
+        private readonly IChatBusiness _chatBusiness;
         private readonly IChatRepository _chatRepository;
         private readonly ILogger<ChatController> _logger;
-        private readonly IChatBusiness _chatBusiness;
 
-        public ChatController(IChatRepository chatRepository, ILogger<ChatController> logger, IChatBusiness chatBusiness)
+        public ChatController(IChatRepository chatRepository, ILogger<ChatController> logger,
+            IChatBusiness chatBusiness)
         {
             chatRepository.ShouldNotBeNull();
             logger.ShouldNotBeNull();

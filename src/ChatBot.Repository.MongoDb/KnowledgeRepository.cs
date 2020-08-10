@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.MongoDb.Configurations;
 using ChatBot.Repository.MongoDb.Models;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using Shouldly;
 
 namespace ChatBot.Repository.MongoDb

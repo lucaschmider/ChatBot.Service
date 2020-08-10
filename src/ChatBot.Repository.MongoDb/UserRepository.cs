@@ -16,11 +16,11 @@ namespace ChatBot.Repository.MongoDb
     {
         private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(ILogger<UserRepository> logger, MongoDbConfiguration configuration): base(configuration)
+        public UserRepository(ILogger<UserRepository> logger, MongoDbConfiguration configuration) : base(configuration)
         {
             logger.ShouldNotBeNull();
             configuration.ShouldNotBeNull();
-            
+
             _logger = logger;
         }
 
@@ -39,7 +39,7 @@ namespace ChatBot.Repository.MongoDb
         /// <inheritdoc />
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            _logger.LogInformation($"Loading all users data.");
+            _logger.LogInformation("Loading all users data.");
             var user = await Collection
                 .FindAsync(u => true)
                 .ConfigureAwait(false);

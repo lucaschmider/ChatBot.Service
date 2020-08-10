@@ -3,7 +3,7 @@
 namespace ChatBot.Repository.Contracts
 {
     /// <summary>
-    ///     Provides methods to manage explanations, keywords and 
+    ///     Provides methods to manage explanations, keywords and
     /// </summary>
     public interface IKnowledgeRepository
     {

@@ -1,7 +1,6 @@
 ﻿using ChatBot.Business.Contracts.User.Models;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Models;
-using Microsoft.AspNetCore.Authentication;
 
 namespace ChatBot.Service.Mappers
 {

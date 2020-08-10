@@ -15,7 +15,8 @@ namespace ChatBot.Business
         private readonly IKnowledgeRepository _knowledgeRepository;
         private readonly IMessageInterpreter _messageInterpreter;
 
-        public ChatBusiness(IMessageInterpreter messageInterpreter, IChatRepository chatRepository, IKnowledgeRepository knowledgeRepository)
+        public ChatBusiness(IMessageInterpreter messageInterpreter, IChatRepository chatRepository,
+            IKnowledgeRepository knowledgeRepository)
         {
             messageInterpreter.ShouldNotBeNull();
             chatRepository.ShouldNotBeNull();
@@ -31,7 +32,7 @@ namespace ChatBot.Business
             var messageInterpretation = await _messageInterpreter
                 .InterpretMessageAsync(message, userId)
                 .ConfigureAwait(false);
-            
+
             await _chatRepository.SendMessageAsync(new ChatMessage
             {
                 ConversationFinished = messageInterpretation.IsCompleted,
@@ -44,12 +45,10 @@ namespace ChatBot.Business
         private async Task<string> GetAnswerAsync(InterpretationResult interpretation)
         {
             if (interpretation.IsCompleted)
-            {
-                return   await _knowledgeRepository.GetDefinitionAsync(
+                return await _knowledgeRepository.GetDefinitionAsync(
                         interpretation.Parameters["definitiontype"],
                         interpretation.Parameters["keyword"])
                     .ConfigureAwait(false) ?? "Entschuldige, das kann ich leider nicht erklären!";
-            }
 
             return interpretation.AnswerString;
         }
