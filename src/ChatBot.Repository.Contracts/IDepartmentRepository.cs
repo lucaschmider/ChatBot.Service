@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChatBot.Repository.Contracts.Models;
 
 namespace ChatBot.Repository.Contracts
@@ -21,5 +22,11 @@ namespace ChatBot.Repository.Contracts
         /// <param name="departmentName"></param>
         /// <returns></returns>
         Task<Department> CreateDepartmentAsync(string departmentName);
+
+        /// <summary>
+        ///     Returns all registered departments
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<Department>> GetAllDepartmentsAsync();
     }
 }

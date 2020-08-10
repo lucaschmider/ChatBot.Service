@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Repository.MongoDb.Configurations;
@@ -32,6 +34,16 @@ namespace ChatBot.Repository.MongoDb
             await Collection.InsertOneAsync(newDepartment).ConfigureAwait(false);
 
             return newDepartment.Map();
+        }
+
+        public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
+        {
+            var departments = await Collection
+                .FindAsync(department => true)
+                .ConfigureAwait(false);
+            return departments
+                .ToList()
+                .Select(department => department.Map());
         }
     }
 }
