@@ -18,6 +18,6 @@
         /// <summary>
         ///     A json string representing the service account file
         /// </summary>
-        public string ServiceAccountJson { get; set; }   
+        public string ServiceAccountJson { get; set; }
     }
 }

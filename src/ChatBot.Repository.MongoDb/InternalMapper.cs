@@ -28,5 +28,27 @@ namespace ChatBot.Repository.MongoDb
                 Uid = user.Uid
             };
         }
+
+        public static ChatMessage Map(this InternalMessage message)
+        {
+            return new ChatMessage
+            {
+                CreateDate = message.CreateDate,
+                Message = message.Message,
+                Recipient = message.Recipient,
+                ConversationFinished = message.ConversationFinished
+            };
+        }
+
+        public static InternalMessage Map(this ChatMessage message)
+        {
+            return new InternalMessage
+            {
+                CreateDate = message.CreateDate,
+                Message = message.Message,
+                Recipient = message.Recipient,
+                ConversationFinished = message.ConversationFinished
+            };
+        }
     }
 }

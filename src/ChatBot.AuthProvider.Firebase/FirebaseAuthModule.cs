@@ -8,7 +8,8 @@ namespace ChatBot.AuthProvider.Firebase
 {
     public static class FirebaseAuthModule
     {
-        public static IServiceCollection AddFirebaseAuthModule(this IServiceCollection services, FirebaseAuthConfiguration configuration)
+        public static IServiceCollection AddFirebaseAuthModule(this IServiceCollection services,
+            FirebaseAuthConfiguration configuration)
         {
             services
                 .AddSingleton<IAuthProvider, FirebaseAuthProvider>()

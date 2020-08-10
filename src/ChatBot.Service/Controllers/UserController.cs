@@ -167,7 +167,7 @@ namespace ChatBot.Service.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Unexpected error occured while deleting a user", userId);
+                _logger.LogError(ex, "Unexpected error occured while deleting a user", userId);
                 return StatusCode(500);
             }
         }

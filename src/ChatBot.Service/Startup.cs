@@ -2,6 +2,7 @@ using System.Linq;
 using ChatBot.AuthProvider.Firebase;
 using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
+using ChatBot.MessageInterpreter.DialogFlow;
 using ChatBot.Repository.MongoDb;
 using ChatBot.Repository.MongoDb.Configurations;
 using Microsoft.AspNetCore.Builder;
@@ -30,10 +31,14 @@ namespace ChatBot.Service
             var firebaseConfiguration = new FirebaseAuthConfiguration();
             Configuration.GetSection(FirebaseAuthConfiguration.SectionKey).Bind(firebaseConfiguration);
 
+            var dialogFlowConfiguration = new DialogFlowConfiguration();
+            Configuration.GetSection(DialogFlowConfiguration.SectionKey).Bind(dialogFlowConfiguration);
+
             services
                 .AddCors()
                 .AddFirebaseAuthModule(firebaseConfiguration)
                 .AddMongoDbModule(mongoConfiguration)
+                .AddDialogFlowModule(dialogFlowConfiguration)
                 .AddChatBotBusinessModule()
                 .AddControllers();
         }

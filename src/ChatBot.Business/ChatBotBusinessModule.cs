@@ -1,4 +1,5 @@
-﻿using ChatBot.Business.Contracts.User;
+﻿using ChatBot.Business.Contracts.Chat;
+using ChatBot.Business.Contracts.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChatBot.Business
@@ -7,7 +8,9 @@ namespace ChatBot.Business
     {
         public static IServiceCollection AddChatBotBusinessModule(this IServiceCollection services)
         {
-            services.AddTransient<IUserBusiness, UserBusiness>();
+            services
+                .AddTransient<IUserBusiness, UserBusiness>()
+                .AddTransient<IChatBusiness, ChatBusiness>();
             return services;
         }
     }

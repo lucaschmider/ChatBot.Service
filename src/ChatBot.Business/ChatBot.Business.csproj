@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ChatBot.Business.Contracts\ChatBot.Business.Contracts.csproj" />
     <ProjectReference Include="..\ChatBot.AuthProvider.Contract\ChatBot.AuthProvider.Contract.csproj" />
+    <ProjectReference Include="..\ChatBot.MessageInterpreter.Contract\ChatBot.MessageInterpreter.Contract.csproj" />
     <ProjectReference Include="..\ChatBot.Repository.Contracts\ChatBot.Repository.Contracts.csproj" />
   </ItemGroup>
 
