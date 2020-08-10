@@ -3,7 +3,7 @@
 namespace ChatBot.Business.Contracts.Statistics
 {
     /// <summary>
-    ///     Provides methods to anonymize, retrieve and collect user feedback 
+    ///     Provides methods to anonymize, retrieve and collect user feedback
     /// </summary>
     public interface IStatisticsBusiness
     {

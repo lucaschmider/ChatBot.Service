@@ -15,7 +15,8 @@ namespace ChatBot.StatisticsProvider.Influx
 {
     public class StatisticsProvider : IStatisticsProvider
     {
-        private const string Query = "SELECT%20mean%28%22rating%22%29%20FROM%20%22user_satisfaction%22%20GROUP%20BY%20time%2830m%29%2C%20%22department%22%20FILL%28previous%29";
+        private const string Query =
+            "SELECT%20mean%28%22rating%22%29%20FROM%20%22user_satisfaction%22%20GROUP%20BY%20time%2830m%29%2C%20%22department%22%20FILL%28previous%29";
 
         private readonly MetricsCollector _collector;
         private readonly InfluxDbConfiguration _configuration;
@@ -66,7 +67,7 @@ namespace ChatBot.StatisticsProvider.Influx
                         return new RatingSlice
                         {
                             Timestamp = (DateTime) slice[0],
-                            Value = Convert.ToSingle( slice[1])
+                            Value = Convert.ToSingle(slice[1])
                         };
                     })
                 });

@@ -61,7 +61,7 @@ namespace ChatBot.Service.Controllers
         }
 
         /// <summary>
-        ///     Loads user satisfaction 
+        ///     Loads user satisfaction
         /// </summary>
         /// <returns></returns>
         [HttpGet]

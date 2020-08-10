@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading;
 using ChatBot.AuthProvider.Firebase;
 using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
