@@ -8,7 +8,7 @@
         /// <summary>
         ///     The id of the department
         /// </summary>
-        public string DepartmentId { get; set; }
+        public string _id { get; set; }
 
         /// <summary>
         ///     The name of the department

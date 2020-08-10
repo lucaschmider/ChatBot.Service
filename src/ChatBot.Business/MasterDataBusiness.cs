@@ -41,17 +41,7 @@ namespace ChatBot.Business
                 throw new MissingDataException();
             }
         }
-
-        public Task<IEnumerable<DepartmentModel>> GetDepartmentsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteDepartmentAsync(string departmentId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public async Task<DataSchemaModel> GetSchema(MasterDataType type)
         {
             await RefreshDepartmentSchemeAsync();

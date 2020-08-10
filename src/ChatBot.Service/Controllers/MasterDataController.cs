@@ -65,7 +65,7 @@ namespace ChatBot.Service.Controllers
 
                 if (!isRequestingUserAdmin)
                 {
-                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate department data.");
                     return Unauthorized();
                 }
 
@@ -114,15 +114,16 @@ namespace ChatBot.Service.Controllers
 
                 if (!isRequestingUserAdmin)
                 {
-                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate department data.");
                     return Unauthorized();
                 }
 
                 var departments = await _departmentRepository
                     .GetAllDepartmentsAsync()
                     .ConfigureAwait(false);
+                var response = departments.Select(Mappers.RepositoryMapper.Map);
 
-                return Ok(departments.Select(department => department.Map()));
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -155,7 +156,7 @@ namespace ChatBot.Service.Controllers
 
                 if (!isRequestingUserAdmin)
                 {
-                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    _logger.LogInformation($"User with id {currentUserId} tried to get data illegally.");
                     return Unauthorized();
                 }
 
@@ -174,6 +175,52 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+        /// <summary>
+        ///     Deletes the specified department
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("data/departments/{departmentId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteDepartmentAsync([FromRoute] string departmentId)
+        {
+            try
+            {
+                _logger.LogInformation($"Deleting department with id {departmentId}");
+
+                if (string.IsNullOrWhiteSpace(departmentId))
+                {
+                    _logger.LogInformation("DepartmentId was invalid");
+                    return NotFound();
+                }
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate department data.");
+                    return Unauthorized();
+                }
+
+                await _departmentRepository
+                    .DeleteDepartmentAsync(departmentId)
+                    .ConfigureAwait(false);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Unexpected error occured while deleting a user");
+                return StatusCode(500);
+            }
+        }
+        
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>

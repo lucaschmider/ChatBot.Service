@@ -45,5 +45,12 @@ namespace ChatBot.Repository.MongoDb
                 .ToList()
                 .Select(department => department.Map());
         }
+
+        public async Task DeleteDepartmentAsync(string departmentId)
+        {
+            await Collection
+                .DeleteOneAsync(department => department.DepartmentId == departmentId)
+                .ConfigureAwait(false);
+        }
     }
 }

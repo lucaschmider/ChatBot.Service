@@ -28,5 +28,12 @@ namespace ChatBot.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<Department>> GetAllDepartmentsAsync();
+
+        /// <summary>
+        ///     Deletes a department
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
+        Task DeleteDepartmentAsync(string departmentId);
     }
 }
