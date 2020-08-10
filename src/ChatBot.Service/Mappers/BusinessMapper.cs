@@ -79,7 +79,7 @@ namespace ChatBot.Service.Mappers
             {
                 DataSchemaModel.DataFieldModel.DataFieldType.Options => "options",
                 DataSchemaModel.DataFieldModel.DataFieldType.Text => "text",
-                _ => throw new ArgumentOutOfRangeException("Unkown type")
+                _ => throw new ArgumentOutOfRangeException(nameof(type))
             };
         }
     }

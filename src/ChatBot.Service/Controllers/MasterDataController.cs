@@ -131,9 +131,16 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+        /// <summary>
+        ///     Returns the schema for the specified model
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("scheme/{type}")]
         [ProducesResponseType(typeof(MasterDataSchema), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> GetSchemaAsync([FromRoute] string type)
         {
             try
@@ -160,10 +167,10 @@ namespace ChatBot.Service.Controllers
                 _logger.LogInformation("Got invalid master data type");
                 return BadRequest();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                throw;
+                _logger.LogError(ex, "Could not load schema");
+                return StatusCode(500);
             }
         }
 
@@ -184,7 +191,7 @@ namespace ChatBot.Service.Controllers
                 return MasterDataType.Knowledge;
             if (type.Equals("departments", StringComparison.InvariantCultureIgnoreCase))
                 return MasterDataType.Department;
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException(nameof(type));
         }
     }
 }
