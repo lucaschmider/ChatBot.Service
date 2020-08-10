@@ -5,21 +5,25 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Service", "src\ChatBot.Service\ChatBot.Service.csproj", "{C120D0A9-6B90-4BDC-AA9F-CCDD22B81115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Repository.Contracts", "src\ChatBot.Repository.Contracts\ChatBot.Repository.Contracts.csproj", "{66DD66A5-D25B-434E-AD83-136D4A457F88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Repository.Contracts", "src\ChatBot.Repository.Contracts\ChatBot.Repository.Contracts.csproj", "{66DD66A5-D25B-434E-AD83-136D4A457F88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Repository.MongoDb", "src\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj", "{EBB521A1-F78F-4DD4-AE8A-DE544357E5E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Repository.MongoDb", "src\ChatBot.Repository.MongoDb\ChatBot.Repository.MongoDb.csproj", "{EBB521A1-F78F-4DD4-AE8A-DE544357E5E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Business.Contracts", "ChatBot.Business.Contracts\ChatBot.Business.Contracts.csproj", "{DCDBEC54-8BC0-4C36-AA84-5D5562E4E167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Business.Contracts", "ChatBot.Business.Contracts\ChatBot.Business.Contracts.csproj", "{DCDBEC54-8BC0-4C36-AA84-5D5562E4E167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Business", "src\ChatBot.Business\ChatBot.Business.csproj", "{3765A464-0E7F-442B-8B5F-235DCCF09FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.Business", "src\ChatBot.Business\ChatBot.Business.csproj", "{3765A464-0E7F-442B-8B5F-235DCCF09FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AuthProvider.Contract", "src\ChatBot.AuthProvider.Contract\ChatBot.AuthProvider.Contract.csproj", "{F1F617D5-4480-4894-93C8-1ED37AF89C18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.AuthProvider.Contract", "src\ChatBot.AuthProvider.Contract\ChatBot.AuthProvider.Contract.csproj", "{F1F617D5-4480-4894-93C8-1ED37AF89C18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AuthProvider.Firebase", "src\ChatBot.AuthProvider.Firebase\ChatBot.AuthProvider.Firebase.csproj", "{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.AuthProvider.Firebase", "src\ChatBot.AuthProvider.Firebase\ChatBot.AuthProvider.Firebase.csproj", "{B0E9FE42-F0AC-4E63-B6FB-27DDD57A5566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.MessageInterpreter.Contract", "src\ChatBot.MessageInterpreter.Contract\ChatBot.MessageInterpreter.Contract.csproj", "{9759958A-D83B-4C99-B1FF-6A90DDE6E976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.MessageInterpreter.Contract", "src\ChatBot.MessageInterpreter.Contract\ChatBot.MessageInterpreter.Contract.csproj", "{9759958A-D83B-4C99-B1FF-6A90DDE6E976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.MessageInterpreter.DialogFlow", "src\ChatBot.MessageInterpreter.DialogFlow\ChatBot.MessageInterpreter.DialogFlow.csproj", "{F3E7E4A7-A5E1-4C80-B11C-B265DE596817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBot.MessageInterpreter.DialogFlow", "src\ChatBot.MessageInterpreter.DialogFlow\ChatBot.MessageInterpreter.DialogFlow.csproj", "{F3E7E4A7-A5E1-4C80-B11C-B265DE596817}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.StatisticsProvider.Contract", "src\ChatBot.StatisticsProvider.Contract\ChatBot.StatisticsProvider.Contract.csproj", "{87A2811E-23AF-488A-B2E5-B10E545EBAC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.StatisticsProvider.Influx", "src\ChatBot.StatisticsProvider.Influx\ChatBot.StatisticsProvider.Influx.csproj", "{8890EF80-AE93-4E21-A733-695661DEBBEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +143,30 @@ Global
 		{F3E7E4A7-A5E1-4C80-B11C-B265DE596817}.Release|x64.Build.0 = Release|Any CPU
 		{F3E7E4A7-A5E1-4C80-B11C-B265DE596817}.Release|x86.ActiveCfg = Release|Any CPU
 		{F3E7E4A7-A5E1-4C80-B11C-B265DE596817}.Release|x86.Build.0 = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|x64.Build.0 = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Debug|x86.Build.0 = Debug|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|x64.ActiveCfg = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|x64.Build.0 = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|x86.ActiveCfg = Release|Any CPU
+		{87A2811E-23AF-488A-B2E5-B10E545EBAC5}.Release|x86.Build.0 = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|x64.Build.0 = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Debug|x86.Build.0 = Debug|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|x64.ActiveCfg = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|x64.Build.0 = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|x86.ActiveCfg = Release|Any CPU
+		{8890EF80-AE93-4E21-A733-695661DEBBEC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
