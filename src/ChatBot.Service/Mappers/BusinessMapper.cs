@@ -1,4 +1,6 @@
-﻿using ChatBot.Business.Contracts.MasterData.Models;
+﻿using System;
+using System.Linq;
+using ChatBot.Business.Contracts.MasterData.Models;
 using ChatBot.Business.Contracts.User.Models;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Models;
@@ -48,6 +50,36 @@ namespace ChatBot.Service.Mappers
             {
                 DepartmentName = department.DepartmentName,
                 DepartmentId = department.DepartmentId
+            };
+        }
+
+        public static MasterDataSchema Map(this DataSchemaModel model)
+        {
+            return new MasterDataSchema
+            {
+                Collection = model.Collection,
+                Fields = model.Fields.Select(field => field.Map())
+            };
+        }
+
+        public static MasterDataSchema.DataFieldModel Map(this DataSchemaModel.DataFieldModel model)
+        {
+            return new MasterDataSchema.DataFieldModel
+            {
+                Name = model.Name,
+                Options = model.Options,
+                Type = model.Type.Map(),
+                Key = model.Key
+            };
+        }
+
+        public static string Map(this DataSchemaModel.DataFieldModel.DataFieldType type)
+        {
+            return type switch
+            {
+                DataSchemaModel.DataFieldModel.DataFieldType.Options => "options",
+                DataSchemaModel.DataFieldModel.DataFieldType.Text => "text",
+                _ => throw new ArgumentOutOfRangeException("Unkown type")
             };
         }
     }

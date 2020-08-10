@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.Business.Contracts.MasterData;
 using ChatBot.Business.Contracts.MasterData.Exceptions;
@@ -50,5 +51,28 @@ namespace ChatBot.Business
         {
             throw new NotImplementedException();
         }
+
+        public async Task<DataSchemaModel> GetSchema(MasterDataType type)
+        {
+            await RefreshDepartmentSchemeAsync();
+            return type switch
+            {
+                MasterDataType.Department => DataSchemaModel.Department,
+                MasterDataType.Knowledge => DataSchemaModel.Knowledge,
+                _ => throw new ArgumentException("Unknown department")
+            };
+        }
+
+        private async Task RefreshDepartmentSchemeAsync()
+        {
+            var departments = await _departmentRepository.GetAllDepartmentsAsync().ConfigureAwait(false);
+           var departmentNames = departments.Select(department => department.DepartmentName);
+
+           var options = DataSchemaModel.Department.Fields.First(field =>
+               field.Key.Equals("departmentName", StringComparison.InvariantCultureIgnoreCase)).Options;
+           options.Clear();
+           options.AddRange(departmentNames);
+        }
+
     }
 }

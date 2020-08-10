@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChatBot.Business;
 using ChatBot.Business.Contracts.MasterData;
 using ChatBot.Business.Contracts.MasterData.Exceptions;
+using ChatBot.Business.Contracts.MasterData.Models;
 using ChatBot.Business.Contracts.User;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
@@ -21,10 +22,10 @@ namespace ChatBot.Service.Controllers
     [ApiController]
     public class MasterDataController : ControllerBase
     {
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly ILogger<MasterDataController> _logger;
         private readonly IMasterDataBusiness _masterDataBusiness;
         private readonly IUserBusiness _userBusiness;
-        private readonly IDepartmentRepository _departmentRepository;
 
         public MasterDataController(IMasterDataBusiness masterDataBusiness, ILogger<MasterDataController> logger,
             IUserBusiness userBusiness, IDepartmentRepository departmentRepository)
@@ -56,7 +57,7 @@ namespace ChatBot.Service.Controllers
             try
             {
                 _logger.LogInformation("Creating new department");
-                
+
                 var currentUserId = GetCurrentUserId();
                 var isRequestingUserAdmin = await _userBusiness
                     .CheckAdminPrivilegesAsync(currentUserId)
@@ -76,7 +77,7 @@ namespace ChatBot.Service.Controllers
             }
             catch (DepartmentAlreadyExistsException)
             {
-                _logger.LogInformation($"Could not create department because it already exists");
+                _logger.LogInformation("Could not create department because it already exists");
                 return BadRequest();
             }
             catch (MissingDataException)
@@ -130,6 +131,42 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("scheme/{type}")]
+        [ProducesResponseType(typeof(MasterDataSchema), 200)]
+        public async Task<IActionResult> GetSchemaAsync([FromRoute] string type)
+        {
+            try
+            {
+                _logger.LogInformation("Trying to get scheme for master data type");
+                var requestedType = ParseMasterDataType(type);
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate user data.");
+                    return Unauthorized();
+                }
+
+                var schema = await _masterDataBusiness.GetSchema(requestedType);
+                return Ok(schema.Map());
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                _logger.LogInformation("Got invalid master data type");
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>
@@ -139,6 +176,15 @@ namespace ChatBot.Service.Controllers
             var userId = User.Claims.FirstOrDefault(claim => claim.Type == "user_id")?.Value;
             userId.ShouldNotBeNullOrWhiteSpace();
             return userId;
+        }
+
+        private static MasterDataType ParseMasterDataType(string type)
+        {
+            if (type.Equals("knowledge", StringComparison.InvariantCultureIgnoreCase))
+                return MasterDataType.Knowledge;
+            if (type.Equals("departments", StringComparison.InvariantCultureIgnoreCase))
+                return MasterDataType.Department;
+            throw new ArgumentOutOfRangeException();
         }
     }
 }
