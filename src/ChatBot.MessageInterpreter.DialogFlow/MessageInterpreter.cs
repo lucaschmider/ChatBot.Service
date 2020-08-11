@@ -70,7 +70,6 @@ namespace ChatBot.MessageInterpreter.DialogFlow
             {
                 ParentAsEntityTypeName =
                     new EntityTypeName(_configuration.ProjectId, _configuration.KeywordsEntityTypeGuid),
-                LanguageCode = "de-DE",
                 EntityValues = {term}
             });
         }
