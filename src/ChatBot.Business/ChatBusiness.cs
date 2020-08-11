@@ -53,7 +53,8 @@ namespace ChatBot.Business
                                                        .ConfigureAwait(false) ??
                                                    "Entschuldige, das kann ich leider nicht erklären!",
                     IntentType.DefaultFallback =>
-                    "Entschuldige, das habe ich nicht verstanden. Kannst du das noch einmal anders formulieren?"
+                    "Entschuldige, das habe ich nicht verstanden. Kannst du das noch einmal anders formulieren?",
+                    _ => throw new ArgumentOutOfRangeException()
                 };
 
             return interpretation.AnswerString;
