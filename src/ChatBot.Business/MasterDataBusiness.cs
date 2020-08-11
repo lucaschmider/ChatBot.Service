@@ -80,6 +80,34 @@ namespace ChatBot.Business
                     });
         }
 
+        public async Task DeleteTermAsync(string definitionType, string keyword)
+        {
+            try
+            {
+                definitionType.ShouldNotBeNullOrWhiteSpace();
+                keyword.ShouldNotBeNullOrWhiteSpace();
+
+                await _knowledgeRepository
+                    .DeleteDefinitionAsync(definitionType, keyword)
+                    .ConfigureAwait(false);
+
+                var definitionRemaining = await _knowledgeRepository
+                    .DefinitionExistsAsync(keyword)
+                    .ConfigureAwait(false);
+
+                if (definitionRemaining)
+                {
+                    return;
+                }
+
+                await _messageInterpreter.DeleteKnownTermAsync(keyword);
+            }
+            catch (ShouldAssertException)
+            {
+                throw new MissingDataException();
+            }
+        }
+
         private async Task RefreshDepartmentSchemeAsync()
         {
             var departments = await _departmentRepository.GetAllDepartmentsAsync().ConfigureAwait(false);

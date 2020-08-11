@@ -22,5 +22,20 @@ namespace ChatBot.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<Knowledge>> GetAllDefinitionsAsync();
+
+        /// <summary>
+        ///     Deletes the specified definition from the knowledge base
+        /// </summary>
+        /// <param name="definitionType"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        Task DeleteDefinitionAsync(string definitionType, string keyword);
+
+        /// <summary>
+        ///     Returns a value indicating whether the specified keyword is defined in any definition type
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        Task<bool> DefinitionExistsAsync(string keyword);
     }
 }

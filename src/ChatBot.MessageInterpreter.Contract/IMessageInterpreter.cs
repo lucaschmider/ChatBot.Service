@@ -20,5 +20,12 @@ namespace ChatBot.MessageInterpreter.Contract
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<KnowledgeTerm>> GetAllKnownTermsAsync();
+
+        /// <summary>
+        ///     Deletes the term from the message interpreter
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        Task DeleteKnownTermAsync(string term);
     }
 }

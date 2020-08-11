@@ -62,6 +62,19 @@ namespace ChatBot.MessageInterpreter.DialogFlow
             });
         }
 
+        public async Task DeleteKnownTermAsync(string term)
+        {
+            await EnsureEntityTypesClient();
+            await _entityTypesClient.BatchDeleteEntitiesAsync(new BatchDeleteEntitiesRequest
+            {
+                ParentAsEntityTypeName =
+                    new EntityTypeName(_configuration.ProjectId, _configuration.KeywordsEntityTypeGuid),
+                LanguageCode = "de-DE",
+                EntityValues = {term}
+
+            });
+        }
+
         private static string CreateSessionPath(string projectId, string contextId)
         {
             return $"projects/{projectId}/agent/sessions/{contextId}";

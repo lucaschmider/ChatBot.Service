@@ -221,6 +221,10 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+        /// <summary>
+        ///     Returns all known terms with explanations
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("data/knowledge")]
         [ProducesResponseType(typeof(IEnumerable<KnowledgeResponse>), 200)]
@@ -252,6 +256,49 @@ namespace ChatBot.Service.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occured while getting knowledge base");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        ///     Deletes a term from the knowledge base
+        /// </summary>
+        /// <param name="definitionType"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("data/knowledge/{definitionType}/{keyword}")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteKnowledgeAsync(string definitionType, string keyword)
+        {
+            try
+            {
+                _logger.LogInformation($"Trying to delete term ({definitionType} / {keyword})");
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate knowledge data.");
+                    return Unauthorized();
+                }
+
+                await _masterDataBusiness.DeleteTermAsync(definitionType, keyword);
+                return NoContent();
+            }
+            catch (MissingDataException ex)
+            {
+                _logger.LogWarning(ex, "The user provided insufficient information");
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error occured while deleting term");
                 return StatusCode(500);
             }
         }
