@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Net;
 using ChatBot.AuthProvider.Firebase;
 using ChatBot.AuthProvider.Firebase.Configurations;
 using ChatBot.Business;
@@ -66,7 +65,6 @@ namespace ChatBot.Service
 
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
             app.UseCors(options => options.WithOrigins(hosts).AllowAnyMethod().AllowAnyHeader());
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
