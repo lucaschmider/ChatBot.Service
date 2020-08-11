@@ -49,7 +49,7 @@ namespace ChatBot.Service.Mappers
             return new DepartmentResponse
             {
                 DepartmentName = department.DepartmentName,
-                _id = department.DepartmentId
+                Id = department.DepartmentId
             };
         }
 
