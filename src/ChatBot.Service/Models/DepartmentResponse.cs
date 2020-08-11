@@ -1,7 +1,7 @@
 ﻿namespace ChatBot.Service.Models
 {
     /// <summary>
-    ///     Represents a department as it is returned 
+    ///     Represents a department as it is returned
     /// </summary>
     public class DepartmentResponse
     {

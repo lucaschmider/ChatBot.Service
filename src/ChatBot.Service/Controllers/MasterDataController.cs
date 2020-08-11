@@ -331,8 +331,8 @@ namespace ChatBot.Service.Controllers
                 }
 
                 var newKnowledge = await _masterDataBusiness
-                        .CreateKnowledgeAsync(knowledge.Map())
-                        .ConfigureAwait(false);
+                    .CreateKnowledgeAsync(knowledge.Map())
+                    .ConfigureAwait(false);
 
                 return Ok(newKnowledge.Map());
             }

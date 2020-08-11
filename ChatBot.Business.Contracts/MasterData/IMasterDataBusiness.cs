@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChatBot.Business.Contracts.MasterData.Models;
 
@@ -29,7 +28,7 @@ namespace ChatBot.Business.Contracts.MasterData
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<KnowledgeModel>> GetKnowledgeBaseAsync();
-        
+
         /// <summary>
         ///     Deletes the specified definition from the knowledge base.
         ///     Further deletes the term from the message interpreter if

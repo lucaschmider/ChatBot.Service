@@ -96,7 +96,7 @@ namespace ChatBot.Service.Mappers
 
         public static KnowledgeModel Map(this CreateKnowledgeRequest knowledge)
         {
-            return  new KnowledgeModel
+            return new KnowledgeModel
             {
                 Description = knowledge.Description,
                 DefinitionType = knowledge.DefinitionType,

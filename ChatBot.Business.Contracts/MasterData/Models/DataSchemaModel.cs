@@ -18,7 +18,8 @@ namespace ChatBot.Business.Contracts.MasterData.Models
             {
                 new DataFieldModel
                 {
-                    Key = "departmentName", Name = "Abteilung", Type = DataFieldModel.DataFieldType.Text, Options = new List<object>()
+                    Key = "departmentName", Name = "Abteilung", Type = DataFieldModel.DataFieldType.Text,
+                    Options = new List<object>()
                 }
             }
         };
