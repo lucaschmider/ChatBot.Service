@@ -38,7 +38,7 @@ namespace ChatBot.Business.Contracts.MasterData.Models
                 },
                 new DataFieldModel
                 {
-                    Key = "definitiontype", Name = "Definition", Type = DataFieldModel.DataFieldType.Options,
+                    Key = "definitionType", Name = "Definition", Type = DataFieldModel.DataFieldType.Options,
                     Options = new List<object> {"GPM", "Prince2"}
                 },
                 new DataFieldModel
