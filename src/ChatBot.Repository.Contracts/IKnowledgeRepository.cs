@@ -36,6 +36,6 @@ namespace ChatBot.Repository.Contracts
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        Task<bool> DefinitionExistsAsync(string keyword);
+        bool DefinitionExistsAsync(string keyword);
     }
 }

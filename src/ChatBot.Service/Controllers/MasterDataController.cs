@@ -303,6 +303,7 @@ namespace ChatBot.Service.Controllers
             }
         }
 
+        
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>

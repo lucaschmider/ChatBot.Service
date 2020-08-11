@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Repository.MongoDb.Configurations;
@@ -37,6 +38,20 @@ namespace ChatBot.Repository.MongoDb
                 .FindAsync(x => true)
                 .ConfigureAwait(false);
             return definitions.ToList().Select(definition => definition.Map());
+        }
+
+        public async Task DeleteDefinitionAsync(string definitionType, string keyword)
+        {
+            _logger.LogInformation("Deleting definition");
+            await Collection.DeleteOneAsync(definition =>
+                definition.DefinitionType == definitionType && definition.Keyword == keyword);
+        }
+
+        public bool DefinitionExistsAsync(string keyword)
+        {
+            return Collection
+                .Find(knowledge => knowledge.Keyword == keyword)
+                .Any();
         }
     }
 }

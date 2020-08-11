@@ -91,9 +91,8 @@ namespace ChatBot.Business
                     .DeleteDefinitionAsync(definitionType, keyword)
                     .ConfigureAwait(false);
 
-                var definitionRemaining = await _knowledgeRepository
-                    .DefinitionExistsAsync(keyword)
-                    .ConfigureAwait(false);
+                var definitionRemaining = _knowledgeRepository
+                    .DefinitionExistsAsync(keyword);
 
                 if (definitionRemaining)
                 {
