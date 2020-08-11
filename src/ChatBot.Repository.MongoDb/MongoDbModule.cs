@@ -14,6 +14,7 @@ namespace ChatBot.Repository.MongoDb
                 .AddSingleton(configuration)
                 .AddSingleton<IKnowledgeRepository, KnowledgeRepository>()
                 .AddSingleton<IUserRepository, UserRepository>()
+                .AddSingleton<IDepartmentRepository, DepartmentRepository>()
                 .AddSingleton<IChatRepository, ChatRepository>();
             return services;
         }

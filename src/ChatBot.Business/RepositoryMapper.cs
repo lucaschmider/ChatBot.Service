@@ -1,4 +1,5 @@
-﻿using ChatBot.Business.Contracts.User.Models;
+﻿using ChatBot.Business.Contracts.MasterData.Models;
+using ChatBot.Business.Contracts.User.Models;
 using ChatBot.Repository.Contracts.Models;
 
 namespace ChatBot.Business
@@ -26,6 +27,15 @@ namespace ChatBot.Business
                 IsAdmin = user.IsAdmin,
                 Email = user.Email,
                 Department = user.Department
+            };
+        }
+
+        public static DepartmentModel Map(this Department department)
+        {
+            return new DepartmentModel
+            {
+                DepartmentId = department.DepartmentId,
+                DepartmentName = department.DepartmentName
             };
         }
     }

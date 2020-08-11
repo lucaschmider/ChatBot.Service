@@ -50,5 +50,34 @@ namespace ChatBot.Repository.MongoDb
                 ConversationFinished = message.ConversationFinished
             };
         }
+
+        public static Department Map(this InternalDepartment department)
+        {
+            return new Department
+            {
+                DepartmentName = department.DepartmentName,
+                DepartmentId = department.DepartmentId
+            };
+        }
+
+        public static Knowledge Map(this InternalKnowledge knowledge)
+        {
+            return new Knowledge
+            {
+                Description = knowledge.Description,
+                Keyword = knowledge.Keyword,
+                DefinitionType = knowledge.DefinitionType
+            };
+        }
+
+        public static InternalKnowledge Map(this Knowledge knowledge)
+        {
+            return new InternalKnowledge
+            {
+                Description = knowledge.Description,
+                Keyword = knowledge.Keyword,
+                DefinitionType = knowledge.DefinitionType
+            };
+        }
     }
 }

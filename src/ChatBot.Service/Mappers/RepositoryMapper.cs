@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ChatBot.Repository.Contracts.Models;
 using ChatBot.Service.Models;
 using ChatBot.StatisticsProvider.Contract.Models;
 
@@ -21,6 +22,15 @@ namespace ChatBot.Service.Mappers
             {
                 Rating = slice.Value,
                 Time = slice.Timestamp
+            };
+        }
+
+        public static DepartmentResponse Map(this Department department)
+        {
+            return new DepartmentResponse
+            {
+                DepartmentName = department.DepartmentName,
+                _id = department.DepartmentId
             };
         }
     }
