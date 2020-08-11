@@ -41,7 +41,7 @@ namespace ChatBot.MessageInterpreter.DialogFlow
             return new InterpretationResult
             {
                 AnswerString = detectIntent.QueryResult.FulfillmentText,
-                DetectedIntent = detectIntent.QueryResult.Intent.Name,
+                DetectedIntent = ParseIntentType(detectIntent.QueryResult.Intent.Name),
                 IsCompleted = detectIntent.QueryResult.AllRequiredParamsPresent,
                 Parameters = detectIntent.QueryResult.Parameters.Fields
                     .ToDictionary(parameter => parameter.Key,
@@ -117,6 +117,13 @@ namespace ChatBot.MessageInterpreter.DialogFlow
         private static string CreateEntityTypePath(string projectId, string entityTypeGuid)
         {
             return $"projects/{projectId}/agent/entityTypes/{entityTypeGuid}";
+        }
+
+        private IntentType ParseIntentType(string intentName)
+        {
+            return intentName.Equals(_configuration.DefineIntentName)
+                ? IntentType.DefinitionIntent
+                : IntentType.DefaultFallback;
         }
 
         private async Task EnsureSessionsClient()

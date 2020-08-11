@@ -29,5 +29,10 @@
         ///     The guid identifier for the dialog flow entity type definition type
         /// </summary>
         public string DefinitionTypeEntityTypeGuid { get; set; }
+
+        /// <summary>
+        ///     The name of the intent used to define a term
+        /// </summary>
+        public string DefineIntentName { get; set; }
     }
 }

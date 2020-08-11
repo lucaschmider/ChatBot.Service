@@ -45,10 +45,16 @@ namespace ChatBot.Business
         private async Task<string> GetAnswerAsync(InterpretationResult interpretation)
         {
             if (interpretation.IsCompleted)
-                return await _knowledgeRepository.GetDefinitionAsync(
-                        interpretation.Parameters["definitiontype"],
-                        interpretation.Parameters["keyword"])
-                    .ConfigureAwait(false) ?? "Entschuldige, das kann ich leider nicht erklären!";
+                return interpretation.DetectedIntent switch
+                {
+                    IntentType.DefinitionIntent => await _knowledgeRepository.GetDefinitionAsync(
+                                                           interpretation.Parameters["definitiontype"],
+                                                           interpretation.Parameters["keyword"])
+                                                       .ConfigureAwait(false) ??
+                                                   "Entschuldige, das kann ich leider nicht erklären!",
+                    IntentType.DefaultFallback =>
+                    "Entschuldige, das habe ich nicht verstanden. Kannst du das noch einmal anders formulieren?"
+                };
 
             return interpretation.AnswerString;
         }

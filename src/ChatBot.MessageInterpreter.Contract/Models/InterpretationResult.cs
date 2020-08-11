@@ -10,7 +10,7 @@ namespace ChatBot.MessageInterpreter.Contract.Models
         /// <summary>
         ///     The intent that was detected
         /// </summary>
-        public string DetectedIntent { get; set; }
+        public IntentType DetectedIntent { get; set; }
 
         /// <summary>
         ///     Indicates whether all parameters are present
