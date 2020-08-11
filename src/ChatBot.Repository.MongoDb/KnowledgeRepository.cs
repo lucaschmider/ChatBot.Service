@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Schema;
 using ChatBot.Repository.Contracts;
 using ChatBot.Repository.Contracts.Models;
 using ChatBot.Repository.MongoDb.Configurations;
@@ -52,6 +51,13 @@ namespace ChatBot.Repository.MongoDb
             return Collection
                 .Find(knowledge => knowledge.Keyword == keyword)
                 .Any();
+        }
+
+        public async Task<Knowledge> CreateDefinitionAsync(Knowledge knowledge)
+        {
+            var internalKnowledge = knowledge.Map();
+            await Collection.InsertOneAsync(internalKnowledge);
+            return internalKnowledge.Map();
         }
     }
 }

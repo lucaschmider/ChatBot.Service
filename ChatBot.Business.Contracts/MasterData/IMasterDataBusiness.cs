@@ -39,5 +39,12 @@ namespace ChatBot.Business.Contracts.MasterData
         /// <param name="keyword"></param>
         /// <returns></returns>
         Task DeleteTermAsync(string definitionType, string keyword);
+
+        /// <summary>
+        ///     Creates the specified knowledge
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<KnowledgeModel> CreateKnowledgeAsync(KnowledgeModel model);
     }
 }

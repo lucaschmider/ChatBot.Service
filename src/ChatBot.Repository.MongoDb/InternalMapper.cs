@@ -69,5 +69,15 @@ namespace ChatBot.Repository.MongoDb
                 DefinitionType = knowledge.DefinitionType
             };
         }
+
+        public static InternalKnowledge Map(this Knowledge knowledge)
+        {
+            return new InternalKnowledge
+            {
+                Description = knowledge.Description,
+                Keyword = knowledge.Keyword,
+                DefinitionType = knowledge.DefinitionType
+            };
+        }
     }
 }

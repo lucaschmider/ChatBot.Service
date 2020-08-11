@@ -37,5 +37,12 @@ namespace ChatBot.Repository.Contracts
         /// <param name="keyword"></param>
         /// <returns></returns>
         bool DefinitionExistsAsync(string keyword);
+
+        /// <summary>
+        ///     Creates the specified definition
+        /// </summary>
+        /// <param name="knowledge"></param>
+        /// <returns></returns>
+        Task<Knowledge> CreateDefinitionAsync(Knowledge knowledge);
     }
 }

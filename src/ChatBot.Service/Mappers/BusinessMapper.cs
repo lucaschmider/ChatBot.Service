@@ -93,5 +93,16 @@ namespace ChatBot.Service.Mappers
                 Name = knowledge.Name
             };
         }
+
+        public static KnowledgeModel Map(this CreateKnowledgeRequest knowledge)
+        {
+            return  new KnowledgeModel
+            {
+                Description = knowledge.Description,
+                DefinitionType = knowledge.DefinitionType,
+                Keywords = knowledge.Synonyms,
+                Name = knowledge.Name
+            };
+        }
     }
 }

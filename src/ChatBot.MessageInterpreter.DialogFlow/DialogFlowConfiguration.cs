@@ -24,5 +24,10 @@
         ///     The guid identifier for the dialog flow entity type keyword
         /// </summary>
         public string KeywordsEntityTypeGuid { get; set; }
+
+        /// <summary>
+        ///     The guid identifier for the dialog flow entity type definition type
+        /// </summary>
+        public string DefinitionTypeEntityTypeGuid { get; set; }
     }
 }

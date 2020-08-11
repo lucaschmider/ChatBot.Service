@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.MessageInterpreter.Contract;
@@ -71,8 +72,42 @@ namespace ChatBot.MessageInterpreter.DialogFlow
                     new EntityTypeName(_configuration.ProjectId, _configuration.KeywordsEntityTypeGuid),
                 LanguageCode = "de-DE",
                 EntityValues = {term}
-
             });
+        }
+
+        public async Task<bool> DefinitionTypeExistsAsync(string definitionType)
+        {
+            await EnsureEntityTypesClient();
+            var definitionTypes = await _entityTypesClient
+                .GetEntityTypeAsync(CreateEntityTypePath(_configuration.ProjectId,
+                    _configuration.DefinitionTypeEntityTypeGuid))
+                .ConfigureAwait(false);
+            return definitionTypes.Entities
+                .Any(entity =>
+                    entity.Value.Equals(definitionType, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public async Task<KnowledgeTerm> CreateKnowledgeTermAsync(string term, IEnumerable<string> synonyms)
+        {
+            await EnsureEntityTypesClient();
+            var enumerable = synonyms as string[] ?? synonyms.ToArray();
+
+            await _entityTypesClient
+                .BatchCreateEntitiesAsync(new BatchCreateEntitiesRequest
+                {
+                    ParentAsEntityTypeName = new EntityTypeName(_configuration.ProjectId,
+                        _configuration.KeywordsEntityTypeGuid),
+                    Entities =
+                    {
+                        new EntityType.Types.Entity {Value = term, Synonyms = {enumerable}}
+                    }
+                });
+
+            return new KnowledgeTerm
+            {
+                Synonyms = enumerable,
+                Keyword = term
+            };
         }
 
         private static string CreateSessionPath(string projectId, string contextId)

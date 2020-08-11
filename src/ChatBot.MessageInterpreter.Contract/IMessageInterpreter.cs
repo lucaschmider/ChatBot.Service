@@ -27,5 +27,20 @@ namespace ChatBot.MessageInterpreter.Contract
         /// <param name="term"></param>
         /// <returns></returns>
         Task DeleteKnownTermAsync(string term);
+
+        /// <summary>
+        ///     Indicated whether the specified definition type exists
+        /// </summary>
+        /// <param name="definitionType"></param>
+        /// <returns></returns>
+        Task<bool> DefinitionTypeExistsAsync(string definitionType);
+
+        /// <summary>
+        ///     Creates the specified definition
+        /// </summary>
+        /// <param name="term"></param>
+        /// <param name="synonyms"></param>
+        /// <returns></returns>
+        Task<KnowledgeTerm> CreateKnowledgeTermAsync(string term, IEnumerable<string> synonyms);
     }
 }

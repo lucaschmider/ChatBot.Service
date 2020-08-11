@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChatBot.Business;
 using ChatBot.Business.Contracts.MasterData;
 using ChatBot.Business.Contracts.MasterData.Exceptions;
 using ChatBot.Business.Contracts.MasterData.Models;
@@ -121,7 +120,7 @@ namespace ChatBot.Service.Controllers
                 var departments = await _departmentRepository
                     .GetAllDepartmentsAsync()
                     .ConfigureAwait(false);
-                var response = departments.Select(Mappers.RepositoryMapper.Map);
+                var response = departments.Select(RepositoryMapper.Map);
 
                 return Ok(response);
             }
@@ -216,7 +215,7 @@ namespace ChatBot.Service.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Unexpected error occured while deleting a user");
+                _logger.LogError(ex, "Unexpected error occured while deleting a user");
                 return StatusCode(500);
             }
         }
@@ -303,7 +302,52 @@ namespace ChatBot.Service.Controllers
             }
         }
 
-        
+        /// <summary>
+        ///     Creates the specified knowledge
+        /// </summary>
+        /// <param name="knowledge"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("data/knowledge")]
+        [ProducesResponseType(typeof(KnowledgeResponse), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> CreateKnowledgeAsync([FromBody] CreateKnowledgeRequest knowledge)
+        {
+            try
+            {
+                _logger.LogInformation("Trying to create knowledge");
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate knowledge data.");
+                    return Unauthorized();
+                }
+
+                var newKnowledge = await _masterDataBusiness
+                        .CreateKnowledgeAsync(knowledge.Map())
+                        .ConfigureAwait(false);
+
+                return Ok(newKnowledge.Map());
+            }
+            catch (MissingDataException ex)
+            {
+                _logger.LogWarning(ex, "The user provided insufficient information");
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error occured while deleting term");
+                return StatusCode(500);
+            }
+        }
+
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>

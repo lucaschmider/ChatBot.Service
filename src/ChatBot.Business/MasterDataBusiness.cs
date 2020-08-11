@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.Business.Contracts.MasterData;
@@ -7,6 +8,7 @@ using ChatBot.Business.Contracts.MasterData.Exceptions;
 using ChatBot.Business.Contracts.MasterData.Models;
 using ChatBot.MessageInterpreter.Contract;
 using ChatBot.Repository.Contracts;
+using ChatBot.Repository.Contracts.Models;
 using Shouldly;
 
 namespace ChatBot.Business
@@ -94,12 +96,46 @@ namespace ChatBot.Business
                 var definitionRemaining = _knowledgeRepository
                     .DefinitionExistsAsync(keyword);
 
-                if (definitionRemaining)
-                {
-                    return;
-                }
+                if (definitionRemaining) return;
 
                 await _messageInterpreter.DeleteKnownTermAsync(keyword);
+            }
+            catch (ShouldAssertException)
+            {
+                throw new MissingDataException();
+            }
+        }
+
+        public async Task<KnowledgeModel> CreateKnowledgeAsync(KnowledgeModel model)
+        {
+            try
+            {
+                model.Description.ShouldNotBeNullOrWhiteSpace();
+                model.DefinitionType.ShouldNotBeNullOrWhiteSpace();
+                model.Name.ShouldNotBeNullOrWhiteSpace();
+                model.Keywords.ShouldNotBeNull();
+                model.Keywords.ShouldNotBeEmpty();
+
+                var isDefinitionTypeValid = await _messageInterpreter
+                    .DefinitionTypeExistsAsync(model.DefinitionType)
+                    .ConfigureAwait(false);
+
+                if (!isDefinitionTypeValid) throw new InvalidDataException("Definition type is not valid");
+
+                var createDefinitionTask = _knowledgeRepository
+                    .CreateDefinitionAsync(new Knowledge
+                    {
+                        Description = model.Description,
+                        Keyword = model.Name,
+                        DefinitionType = model.DefinitionType
+                    });
+                var createKnowledgeTask = _messageInterpreter
+                    .CreateKnowledgeTermAsync(model.Name, model.Keywords);
+
+                await Task.WhenAll(createDefinitionTask, createKnowledgeTask)
+                    .ConfigureAwait(false);
+
+                return model;
             }
             catch (ShouldAssertException)
             {
