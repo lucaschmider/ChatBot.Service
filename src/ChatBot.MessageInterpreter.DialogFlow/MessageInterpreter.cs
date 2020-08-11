@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatBot.MessageInterpreter.Contract;
@@ -35,7 +34,7 @@ namespace ChatBot.MessageInterpreter.DialogFlow
                         LanguageCode = "de-DE"
                     }
                 },
-                Session = $"projects/hidden-howl-282919/agent/sessions/{contextId}"
+                Session = CreateSessionPath(_configuration.ProjectId, contextId)
             }).ConfigureAwait(false);
 
             return new InterpretationResult
@@ -54,13 +53,23 @@ namespace ChatBot.MessageInterpreter.DialogFlow
             await EnsureEntityTypesClient();
             var entityType = await _entityTypesClient
                 .GetEntityTypeAsync(
-                    "projects/hidden-howl-282919/agent/entityTypes/0f587498-d18f-429a-bf4c-88c5fb9f5c63")
+                    CreateEntityTypePath(_configuration.ProjectId, _configuration.KeywordsEntityTypeGuid))
                 .ConfigureAwait(false);
             return entityType.Entities.Select(entity => new KnowledgeTerm
             {
                 Keyword = entity.Value,
                 Synonyms = entity.Synonyms
             });
+        }
+
+        private static string CreateSessionPath(string projectId, string contextId)
+        {
+            return $"projects/{projectId}/agent/sessions/{contextId}";
+        }
+
+        private static string CreateEntityTypePath(string projectId, string entityTypeGuid)
+        {
+            return $"projects/{projectId}/agent/entityTypes/{entityTypeGuid}";
         }
 
         private async Task EnsureSessionsClient()
