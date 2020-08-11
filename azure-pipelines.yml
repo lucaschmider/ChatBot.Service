@@ -26,3 +26,8 @@ steps:
     command: 'build'
     projects: 'src/ChatBot.Service/*.csproj'
     configuration: 'Release'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
