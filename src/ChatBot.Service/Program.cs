@@ -15,7 +15,13 @@ namespace ChatBot.Service
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .ConfigureKestrel(options =>
+                        {
+                            options.ListenAnyIP(8080);
+                            options.ListenAnyIP(8443, listenOptions => listenOptions.UseHttps("certificate.pfx"));
+                        })
+                        .UseStartup<Startup>();
                 });
         }
     }
