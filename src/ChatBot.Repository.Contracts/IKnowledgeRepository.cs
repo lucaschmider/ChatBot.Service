@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ChatBot.Repository.Contracts.Models;
 
 namespace ChatBot.Repository.Contracts
 {
@@ -14,5 +16,11 @@ namespace ChatBot.Repository.Contracts
         /// <param name="keyword"></param>
         /// <returns></returns>
         Task<string> GetDefinitionAsync(string definitionType, string keyword);
+
+        /// <summary>
+        ///     Returns all definitions
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<Knowledge>> GetAllDefinitionsAsync();
     }
 }

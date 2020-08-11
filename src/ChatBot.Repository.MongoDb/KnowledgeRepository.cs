@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ChatBot.Repository.Contracts;
+using ChatBot.Repository.Contracts.Models;
 using ChatBot.Repository.MongoDb.Configurations;
 using ChatBot.Repository.MongoDb.Models;
 using Microsoft.Extensions.Logging;
@@ -25,6 +28,15 @@ namespace ChatBot.Repository.MongoDb
             var definitionCursor = await Collection.FindAsync(knowledge =>
                 knowledge.DefinitionType == definitionType && knowledge.Keyword == keyword);
             return definitionCursor.FirstOrDefault()?.Description;
+        }
+
+        public async Task<IEnumerable<Knowledge>> GetAllDefinitionsAsync()
+        {
+            _logger.LogInformation("Loading all definitions");
+            var definitions = await Collection
+                .FindAsync(x => true)
+                .ConfigureAwait(false);
+            return definitions.ToList().Select(definition => definition.Map());
         }
     }
 }

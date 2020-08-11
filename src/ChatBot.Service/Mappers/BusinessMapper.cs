@@ -82,5 +82,16 @@ namespace ChatBot.Service.Mappers
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };
         }
+
+        public static KnowledgeResponse Map(this KnowledgeModel knowledge)
+        {
+            return new KnowledgeResponse
+            {
+                Description = knowledge.Description,
+                DefinitionType = knowledge.DefinitionType,
+                Keywords = knowledge.Keywords,
+                Name = knowledge.Name
+            };
+        }
     }
 }

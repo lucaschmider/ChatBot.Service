@@ -220,7 +220,42 @@ namespace ChatBot.Service.Controllers
                 return StatusCode(500);
             }
         }
-        
+
+        [Authorize]
+        [HttpGet("data/knowledge")]
+        [ProducesResponseType(typeof(IEnumerable<KnowledgeResponse>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetKnowledgeAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Loading knowledge base");
+
+                var currentUserId = GetCurrentUserId();
+                var isRequestingUserAdmin = await _userBusiness
+                    .CheckAdminPrivilegesAsync(currentUserId)
+                    .ConfigureAwait(false);
+
+                if (!isRequestingUserAdmin)
+                {
+                    _logger.LogInformation($"User with id {currentUserId} tried to manipulate knowledge data.");
+                    return Unauthorized();
+                }
+
+                var knowledgeBase = await _masterDataBusiness
+                    .GetKnowledgeBaseAsync()
+                    .ConfigureAwait(false);
+
+                return Ok(knowledgeBase.Select(knowledge => knowledge.Map()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occured while getting knowledge base");
+                return StatusCode(500);
+            }
+        }
+
         /// <summary>
         ///     Returns the id of the current user id
         /// </summary>
@@ -232,6 +267,11 @@ namespace ChatBot.Service.Controllers
             return userId;
         }
 
+        /// <summary>
+        ///     Converts a string to a master data type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private static MasterDataType ParseMasterDataType(string type)
         {
             if (type.Equals("knowledge", StringComparison.InvariantCultureIgnoreCase))

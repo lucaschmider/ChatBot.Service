@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChatBot.Business.Contracts.MasterData.Models;
 
 namespace ChatBot.Business.Contracts.MasterData
@@ -20,7 +22,12 @@ namespace ChatBot.Business.Contracts.MasterData
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-
         Task<DataSchemaModel> GetSchema(MasterDataType type);
+
+        /// <summary>
+        ///     Returns a list of all known word and definitions
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<KnowledgeModel>> GetKnowledgeBaseAsync();
     }
 }

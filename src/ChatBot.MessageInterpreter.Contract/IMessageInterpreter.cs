@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChatBot.MessageInterpreter.Contract.Models;
 
 namespace ChatBot.MessageInterpreter.Contract
@@ -13,5 +14,11 @@ namespace ChatBot.MessageInterpreter.Contract
         /// <param name="contextId"></param>
         /// <returns></returns>
         Task<InterpretationResult> InterpretMessageAsync(string message, string contextId);
+
+        /// <summary>
+        ///     Returns all terms known by the interpreter
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<KnowledgeTerm>> GetAllKnownTermsAsync();
     }
 }
