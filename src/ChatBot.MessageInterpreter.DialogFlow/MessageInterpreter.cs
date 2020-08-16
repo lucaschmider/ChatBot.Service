@@ -63,6 +63,16 @@ namespace ChatBot.MessageInterpreter.DialogFlow
             });
         }
 
+        public async Task<IEnumerable<string>> GetAllDefinitionTypeNamesAsync()
+        {
+            await EnsureEntityTypesClient();
+            var entityType = await _entityTypesClient
+                .GetEntityTypeAsync(
+                    CreateEntityTypePath(_configuration.ProjectId, _configuration.DefinitionTypeEntityTypeGuid))
+                .ConfigureAwait(false);
+            return entityType.Entities.Select(entity => entity.Value);
+        }
+
         public async Task DeleteKnownTermAsync(string term)
         {
             await EnsureEntityTypesClient();
