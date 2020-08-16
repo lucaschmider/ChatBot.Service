@@ -22,6 +22,12 @@ namespace ChatBot.MessageInterpreter.Contract
         Task<IEnumerable<KnowledgeTerm>> GetAllKnownTermsAsync();
 
         /// <summary>
+        ///     Returns all known definition types
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetAllDefinitionTypeNamesAsync();
+
+        /// <summary>
         ///     Deletes the term from the message interpreter
         /// </summary>
         /// <param name="term"></param>
